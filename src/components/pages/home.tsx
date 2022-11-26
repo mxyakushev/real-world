@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from 'hooks';
 import { TabList, Tab, TabPanels, TabPanel, Tabs } from '@chakra-ui/react';
+import { useGetArticlesQuery } from 'app';
+import { GlobalInfo } from 'components/organisms';
 
 export const Home = () => {
   const user = useAuth();
+  const [offset, setOffset] = useState(0);
+  const { data } = useGetArticlesQuery({ limit: 20, offset });
   return (
-    <div>
+    <div className="p-3">
       <Tabs size="md">
         <TabList>
           {user && <Tab>Your feed</Tab>}
@@ -18,7 +22,8 @@ export const Home = () => {
             </TabPanel>
           )}
           <TabPanel>
-            <p>global</p>
+            <h2>Page: {offset + 1}</h2>
+            <GlobalInfo articles={data?.articles || []} setOffset={setOffset} />
           </TabPanel>
         </TabPanels>
       </Tabs>

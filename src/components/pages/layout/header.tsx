@@ -12,6 +12,7 @@ import {
   MenuDivider,
   useDisclosure,
   useColorModeValue,
+  Stack,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
@@ -29,7 +30,7 @@ export const Header = () => {
   };
 
   return (
-    <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+    <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} mb={4}>
       <Flex h={16} alignItems="center" justifyContent="space-between">
         <IconButton
           size="md"
@@ -66,6 +67,21 @@ export const Header = () => {
           </Flex>
         )}
       </Flex>
+      {isOpen ? (
+        <Box pb={4} display={{ md: 'none' }}>
+          <Stack as="nav" spacing={4}>
+            <Link to="/">Home</Link>
+            {user ? (
+              <Link to="/settings">Settings</Link>
+            ) : (
+              <>
+                <Link to="/register">Register</Link>
+                <Link to="/login">Login</Link>
+              </>
+            )}
+          </Stack>
+        </Box>
+      ) : null}
     </Box>
   );
 };
