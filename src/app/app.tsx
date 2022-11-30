@@ -1,15 +1,18 @@
-import { Route, Routes } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 import { generateRoutes } from 'routes';
-import { cloneElement } from 'react';
-import { Layout, NotFound } from 'components';
+import React, { Suspense } from 'react';
+import { Box, Spinner } from '@chakra-ui/react';
 
 export const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        {generateRoutes.map((route) => cloneElement(route))}
-      </Route>
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <Suspense
+      fallback={
+        <Box display="flex" alignItems="center" justifyContent="center" w="100%" h="100vh">
+          <Spinner size="xl" />
+        </Box>
+      }
+    >
+      {useRoutes(generateRoutes)}
+    </Suspense>
   );
 };

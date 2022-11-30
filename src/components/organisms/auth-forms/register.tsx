@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
-import { Input, Button, Heading } from '@chakra-ui/react';
-import { FieldValues, SubmitHandler, useForm, Controller } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { Button, Heading, Box } from '@chakra-ui/react';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { IUserRegister } from 'types';
-import { useAppDispatch, useAuth } from 'hooks';
+import { useAppDispatch, useAppSelector, useAuth } from 'hooks';
 import { register } from 'app/store/thunks';
 import { Link, useNavigate } from 'react-router-dom';
 import { routes } from 'routes';
-import { ErrorMessage } from '@hookform/error-message';
-import { WarningIcon } from '@chakra-ui/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { FormInput } from 'components/molecules';
+import { errorMessageAuthStateSelector, loadingAuthStateSelector } from 'app';
 
 const schema = yup.object().shape({
   username: yup
@@ -29,14 +29,19 @@ const schema = yup.object().shape({
     .max(30, 'maximum 30 characters'),
 });
 
-export const Register = () => {
+const Register = () => {
   const user = useAuth();
+  const [showError, setShowError] = useState(false);
+  const authErrorMessageFromBackend = useAppSelector(errorMessageAuthStateSelector);
+  const authLoading = useAppSelector(loadingAuthStateSelector);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
+    setError,
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
@@ -46,7 +51,11 @@ export const Register = () => {
       password: '',
     },
   });
-  const submit: SubmitHandler<FieldValues> = ({ username, email, password }): void => {
+  const submit: SubmitHandler<FieldValues> = async ({
+    username,
+    email,
+    password,
+  }): Promise<void> => {
     const body: IUserRegister = {
       user: {
         username,
@@ -54,7 +63,12 @@ export const Register = () => {
         password,
       },
     };
-    dispatch(register(body));
+    const response = await dispatch(register(body));
+    if (response.meta.requestStatus === 'rejected') {
+      setShowError(true);
+      reset();
+    }
+    reset();
   };
 
   useEffect(() => {
@@ -64,75 +78,73 @@ export const Register = () => {
   }, [navigate, user]);
 
   return (
-    <div className="w-full h-3/4 flex items-center justify-center">
-      <form onSubmit={handleSubmit(submit)} className="w-1/3 p-5 border rounded">
-        <Heading as="h2" size="2xl" className="mb-2 text-center">
-          Sign Up
-        </Heading>
-        <Link to="/login" className="block text-center mb-4 transition hover:underline">
-          already have an account ?
-        </Link>
-        <Controller
-          control={control}
-          name="username"
-          render={({ field }) => (
-            <div className="mb-2">
-              <Input {...field} className="mb-1" placeholder="username" type="text" size="md" />
-              <ErrorMessage
-                errors={errors}
-                name="username"
-                render={({ message }: { message: string }) => (
-                  <div className="text-red-500">
-                    <WarningIcon w={5} h={5} />
-                    <span className="ml-2">{message}</span>
-                  </div>
-                )}
-              />
-            </div>
-          )}
-        />
-        <Controller
-          control={control}
-          name="email"
-          render={({ field }) => (
-            <div className="mb-2">
-              <Input {...field} className="mb-1" placeholder="email" type="email" size="md" />
-              <ErrorMessage
-                errors={errors}
-                name="email"
-                render={({ message }: { message: string }) => (
-                  <div className="text-red-500">
-                    <WarningIcon w={5} h={5} />
-                    <span className="ml-2">{message}</span>
-                  </div>
-                )}
-              />
-            </div>
-          )}
-        />
-        <Controller
-          control={control}
-          name="password"
-          render={({ field }) => (
-            <div className="mb-2">
-              <Input {...field} className="mb-1" placeholder="password" type="password" size="md" />
-              <ErrorMessage
-                errors={errors}
-                name="password"
-                render={({ message }: { message: string }) => (
-                  <div className="text-red-500">
-                    <WarningIcon w={5} h={5} />
-                    <span className="ml-2">{message}</span>
-                  </div>
-                )}
-              />
-            </div>
-          )}
-        />
-        <div className="w-full flex justify-end">
-          <Button type="submit">register</Button>
-        </div>
-      </form>
-    </div>
+    <Box
+      w="400px"
+      h="80%"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      mx="auto"
+      textAlign="center"
+    >
+      {showError ? (
+        <Box textAlign="center">
+          <Heading mb={5}>{authErrorMessageFromBackend}</Heading>
+          <Button
+            onClick={() => {
+              setShowError(false);
+              setError('username', { type: 'focus' });
+              setError('email', { type: 'focus' });
+              setError('password', { type: 'focus' });
+            }}
+          >
+            Go Back
+          </Button>
+        </Box>
+      ) : (
+        <form onSubmit={handleSubmit(submit)} style={{ width: '100%' }}>
+          <Heading as="h2" size="2xl" mb={2}>
+            Sign Up
+          </Heading>
+          <Link
+            to="/login"
+            style={{
+              margin: '0 0 10px',
+              display: 'inline-block',
+              textDecoration: 'underline',
+              textUnderlineOffset: '3px',
+            }}
+          >
+            already have an account ?
+          </Link>
+          <FormInput
+            control={control}
+            errors={errors}
+            name="username"
+            placeholder="Username"
+            type="text"
+          />
+          <FormInput
+            control={control}
+            errors={errors}
+            name="email"
+            placeholder="Email"
+            type="email"
+          />
+          <FormInput
+            control={control}
+            errors={errors}
+            name="password"
+            placeholder="Password"
+            type="password"
+          />
+          <Button type="submit" w="100%" disabled={authLoading}>
+            register
+          </Button>
+        </form>
+      )}
+    </Box>
   );
 };
+
+export default Register;

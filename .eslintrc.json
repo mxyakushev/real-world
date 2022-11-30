@@ -70,6 +70,8 @@
         "react/no-unescaped-entities": 0,
         "func-names": "off",
         "no-underscore-dangle": "off",
-        "import/extensions": "off"
+        "import/extensions": "off",
+        "jsx-a11y/anchor-is-valid": "off",
+        "import/named": "off"
     }
 }

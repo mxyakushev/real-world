@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_URL } from 'http';
-import { IArticles } from 'types';
+import { IArticle, IArticles, IComments } from 'types';
 
 export const articleQuery = createApi({
   reducerPath: 'articleQuery',
@@ -14,7 +14,17 @@ export const articleQuery = createApi({
         url: `articles?limit=${limit}&offset=${offset}`,
       }),
     }),
+    getArticleSlug: builder.query<{ article: IArticle }, { slug: string }>({
+      query: ({ slug }) => ({
+        url: `articles/${slug}`,
+      }),
+    }),
+    getCommentSlug: builder.query<IComments, { slug: string }>({
+      query: ({ slug }) => ({
+        url: `articles/${slug}/comments`,
+      }),
+    }),
   }),
 });
 
-export const { useGetArticlesQuery } = articleQuery;
+export const { useGetArticlesQuery, useGetArticleSlugQuery, useGetCommentSlugQuery } = articleQuery;

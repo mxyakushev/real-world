@@ -15,7 +15,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAuth } from 'hooks';
 import { authService } from 'services';
 import { removeUser } from 'app';
@@ -30,7 +30,7 @@ export const Header = () => {
   };
 
   return (
-    <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} mb={4}>
+    <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
       <Flex h={16} alignItems="center" justifyContent="space-between">
         <IconButton
           size="md"
@@ -40,13 +40,13 @@ export const Header = () => {
           onClick={isOpen ? onClose : onOpen}
         />
         <HStack as="nav" spacing={4} display={{ base: 'none', md: 'flex' }}>
-          <Link to="/">Home</Link>
+          <NavLink to="/">Home</NavLink>
           {user ? (
-            <Link to="/settings">Settings</Link>
+            <NavLink to="/settings">Settings</NavLink>
           ) : (
             <>
-              <Link to="/register">Register</Link>
-              <Link to="/login">Login</Link>
+              <NavLink to="/register">Register</NavLink>
+              <NavLink to="/login">Login</NavLink>
             </>
           )}
         </HStack>
@@ -70,13 +70,13 @@ export const Header = () => {
       {isOpen ? (
         <Box pb={4} display={{ md: 'none' }}>
           <Stack as="nav" spacing={4}>
-            <Link to="/">Home</Link>
+            <NavLink to="/">Home</NavLink>
             {user ? (
-              <Link to="/settings">Settings</Link>
+              <NavLink to="/settings">Settings</NavLink>
             ) : (
               <>
-                <Link to="/register">Register</Link>
-                <Link to="/login">Login</Link>
+                <NavLink to="/register">Register</NavLink>
+                <NavLink to="/login">Login</NavLink>
               </>
             )}
           </Stack>

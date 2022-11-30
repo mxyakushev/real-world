@@ -1,5 +1,5 @@
 export interface IAuthor {
-  id: number;
+  id?: number;
   email: string;
   username: string;
   bio: string;
@@ -23,4 +23,16 @@ export interface IArticle {
 export interface IArticles {
   articles: IArticle[];
   articlesCount: number;
+}
+
+export interface IComments {
+  comments: [
+    {
+      id: number;
+      createdAt: Date;
+      updatedAt: Date;
+      body: 'string';
+      author: IAuthor;
+    }
+  ];
 }

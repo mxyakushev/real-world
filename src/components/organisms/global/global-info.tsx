@@ -1,33 +1,37 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { IArticle } from 'types';
-import { ArticleList } from 'components';
-import { Button } from '@chakra-ui/react';
+import { ArticleList, Pagination } from 'components';
+import { Box } from '@chakra-ui/react';
 
 interface IProps {
   articles: IArticle[];
+  numberOfArticles: number;
   setOffset: Dispatch<SetStateAction<number>>;
+  offset: number;
+  isLoaded: boolean;
+  setRange: Dispatch<SetStateAction<number>>;
+  range: number;
 }
 
-export const GlobalInfo: FC<IProps> = ({ articles, setOffset }) => {
+export const GlobalInfo: FC<IProps> = ({
+  articles,
+  setOffset,
+  offset,
+  isLoaded,
+  numberOfArticles,
+  setRange,
+  range,
+}) => {
   return (
-    <div>
-      <ArticleList articles={articles} />
-      <Button
-        onClick={() => {
-          setOffset((prevState) => (prevState === 0 ? prevState : prevState - 1));
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-      >
-        -
-      </Button>
-      <Button
-        onClick={() => {
-          setOffset((prevState) => prevState + 1);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-      >
-        +
-      </Button>
-    </div>
+    <Box>
+      <ArticleList articles={articles} isLoaded={isLoaded} />
+      <Pagination
+        setOffset={setOffset}
+        offset={offset}
+        numberOfArticles={numberOfArticles}
+        setRange={setRange}
+        range={range}
+      />
+    </Box>
   );
 };

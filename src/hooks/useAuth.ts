@@ -1,4 +1,4 @@
-import { authTypeStateSelector } from 'app';
+import { authStateSelector } from 'app';
 import { useAppSelector } from 'hooks';
 
-export const useAuth = () => useAppSelector(authTypeStateSelector);
+export const useAuth = () => useAppSelector(authStateSelector);

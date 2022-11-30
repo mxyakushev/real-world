@@ -1,10 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { AuthReducer } from './slices';
+import { AuthReducer, TagsReducer } from './slices';
 import { articleQuery } from './queries';
 
 export const store = configureStore({
   reducer: {
     auth: AuthReducer,
+    tags: TagsReducer,
     [articleQuery.reducerPath]: articleQuery.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(articleQuery.middleware),
