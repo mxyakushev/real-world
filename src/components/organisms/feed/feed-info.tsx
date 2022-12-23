@@ -3,7 +3,7 @@ import { IArticle } from 'types';
 import { ArticleList, Pagination } from 'components';
 import { Box } from '@chakra-ui/react';
 import { useAppDispatch } from 'hooks';
-import { getAllArticles } from 'app';
+import { getArticlesFeed } from 'app';
 
 interface IProps {
   articles: IArticle[];
@@ -15,7 +15,7 @@ interface IProps {
   range: number;
 }
 
-export const GlobalInfo: FC<IProps> = ({
+export const FeedInfo: FC<IProps> = ({
   articles,
   setOffset,
   offset,
@@ -26,7 +26,7 @@ export const GlobalInfo: FC<IProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getAllArticles({ limit: 10, offset }));
+    dispatch(getArticlesFeed({ limit: 10, offset }));
   }, [dispatch, offset]);
   return (
     <Box>

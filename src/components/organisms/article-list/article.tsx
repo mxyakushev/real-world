@@ -9,10 +9,11 @@ interface IProps {
   isLoaded: boolean;
 }
 
-export const Article: FC<IProps> = ({ article, isLoaded }) => {
+export const Article: FC<IProps> = ({ article, isLoaded}) => {
   const { title, author, description, favoritesCount, favorited, slug, createdAt, tagList } =
     article;
   const navigate = useNavigate();
+
   return (
     <Box
       mb={5}
@@ -21,7 +22,7 @@ export const Article: FC<IProps> = ({ article, isLoaded }) => {
       padding={5}
       borderRadius={5}
       onClick={() => {
-        navigate(`articles/${slug}`);
+        navigate(`/articles/${slug}`);
       }}
     >
       <Box display="flex" justifyContent="space-between">
@@ -32,6 +33,7 @@ export const Article: FC<IProps> = ({ article, isLoaded }) => {
           isLoaded={isLoaded}
           favorited={favorited}
           favoritesCount={favoritesCount}
+          slug={slug}
         />
       </Box>
       <Box fontWeight="700" mb={3} cursor="pointer">

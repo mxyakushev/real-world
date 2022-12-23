@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Heading } from '@chakra-ui/react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { IUserLogin } from 'types';
 import { useAppDispatch, useAppSelector, useAuth } from 'hooks';
 import { login } from 'app/store/thunks';
@@ -10,6 +10,11 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormInput } from 'components/molecules';
 import { errorMessageAuthStateSelector, loadingAuthStateSelector } from 'app';
+
+interface IFormValues {
+  email: string;
+  password: string;
+}
 
 const schema = yup.object().shape({
   email: yup
@@ -39,7 +44,7 @@ const Login = () => {
     formState: { errors },
     reset,
     setError,
-  } = useForm({
+  } = useForm<IFormValues>({
     mode: 'onChange',
     resolver: yupResolver(schema),
     defaultValues: {
@@ -47,7 +52,7 @@ const Login = () => {
       password: '',
     },
   });
-  const submit: SubmitHandler<FieldValues> = async ({ email, password }): Promise<void> => {
+  const submit: SubmitHandler<IFormValues> = async ({ email, password }): Promise<void> => {
     const body: IUserLogin = {
       user: {
         email,

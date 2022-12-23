@@ -1,12 +1,12 @@
-import axios from 'axios';
-
-import { API_URL } from 'http';
+import { instance } from 'http';
 import { IUserLogin, IUserRegister } from 'types';
+import Cookies from 'js-cookie';
 
 const register = async (userData: IUserRegister) => {
-  const response = await axios.post(`${API_URL}/users`, userData);
+  const response = await instance.post('/users', userData);
 
   if (response) {
+    Cookies.set('token', response.data.user.token);
     localStorage.setItem('user', JSON.stringify(response.data));
   }
 
@@ -14,16 +14,24 @@ const register = async (userData: IUserRegister) => {
 };
 
 const login = async (userData: IUserLogin) => {
-  const response = await axios.post(`${API_URL}/users/login`, userData);
+  const response = await instance.post('/users/login', userData);
 
   if (response) {
+    Cookies.set('token', response.data.user.token);
     localStorage.setItem('user', JSON.stringify(response.data));
   }
 
   return response.data;
 };
 
+const checkToken = () => {
+  return JSON.parse(localStorage.getItem('user') || JSON.stringify('')) !== ''
+    ? `Bearer ${JSON.parse(localStorage.getItem('user') || JSON.stringify(''))?.user?.token}`
+    : '';
+};
+
 const logout = () => {
+  Cookies.remove('token');
   localStorage.removeItem('user');
 };
 
@@ -31,4 +39,5 @@ export const authService = {
   register,
   logout,
   login,
+  checkToken,
 };

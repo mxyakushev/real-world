@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
-import { Control, Controller, FieldErrors, FieldValues } from 'react-hook-form';
+import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { CustomInput, CustomError } from 'components/atoms';
 
 export type InputType = 'email' | 'text' | 'password';
 
 interface IProps {
   control: Control<any>;
-  errors: FieldErrors<FieldValues>;
+  errors: FieldErrors;
   name: string;
   placeholder: string;
   type: InputType;

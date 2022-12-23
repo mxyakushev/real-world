@@ -4,11 +4,8 @@ import { tagsService } from 'services';
 export const tagsThunk = createAsyncThunk('tags/tagsThunk', async (_, thunkAPI) => {
   try {
     return await tagsService.getTags();
-  } catch (error: any) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Error. Something went wrong';
     return thunkAPI.rejectWithValue(message);
   }
 });

@@ -14,9 +14,9 @@ export const TagList: FC<IProps> = ({ isLoaded, tagList, large }) => {
         {tagList.map((tag) => (
           <Tag
             key={Math.random()}
-            ml={large ? 5 : 2}
-            mb={large ? 5 : 2}
-            fontSize={large ? '34px' : '14px'}
+            ml={large ? 3 : 2}
+            mb={large ? 3 : 2}
+            fontSize={large ? '18px' : '14px'}
             cursor="pointer"
           >
             {tag}

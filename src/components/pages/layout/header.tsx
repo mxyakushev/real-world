@@ -15,18 +15,21 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAuth } from 'hooks';
 import { authService } from 'services';
-import { removeUser } from 'app';
+import { getAllArticles, removeUser } from 'app';
 
 export const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const user = useAuth();
   const logout = () => {
+    navigate('/');
     authService.logout();
     dispatch(removeUser());
+    dispatch(getAllArticles({ limit: 10, offset: 0 }));
   };
 
   return (
@@ -61,7 +64,13 @@ export const Header = () => {
                 <MenuItem>My Articles</MenuItem>
                 <MenuItem>Favorite Articles</MenuItem>
                 <MenuDivider />
-                <MenuItem onClick={() => logout()}>Logout</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    logout();
+                  }}
+                >
+                  Logout
+                </MenuItem>
               </MenuList>
             </Menu>
           </Flex>

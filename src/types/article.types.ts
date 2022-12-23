@@ -26,13 +26,11 @@ export interface IArticles {
 }
 
 export interface IComments {
-  comments: [
-    {
-      id: number;
-      createdAt: Date;
-      updatedAt: Date;
-      body: 'string';
-      author: IAuthor;
-    }
-  ];
+  comments: {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    body: 'string';
+    author: IAuthor;
+  }[];
 }

@@ -1,14 +1,14 @@
 export interface IUserLogin {
   user: {
-    email: 'string';
-    password: 'string';
+    email: string;
+    password: string;
   };
 }
 
 export interface IUserRegister {
   user: {
-    email: 'string';
-    username: 'string';
-    password: 'string';
+    email: string;
+    username: string;
+    password: string;
   };
 }

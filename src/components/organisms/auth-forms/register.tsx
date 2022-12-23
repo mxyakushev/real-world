@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Heading, Box } from '@chakra-ui/react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { IUserRegister } from 'types';
 import { useAppDispatch, useAppSelector, useAuth } from 'hooks';
 import { register } from 'app/store/thunks';
 import { Link, useNavigate } from 'react-router-dom';
-import { routes } from 'routes';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormInput } from 'components/molecules';
 import { errorMessageAuthStateSelector, loadingAuthStateSelector } from 'app';
+import { routes } from 'routes';
+
+export interface IFormValues {
+  username: string;
+  email: string;
+  password: string;
+}
 
 const schema = yup.object().shape({
   username: yup
@@ -42,7 +48,7 @@ const Register = () => {
     formState: { errors },
     reset,
     setError,
-  } = useForm({
+  } = useForm<IFormValues>({
     mode: 'onChange',
     resolver: yupResolver(schema),
     defaultValues: {
@@ -51,7 +57,7 @@ const Register = () => {
       password: '',
     },
   });
-  const submit: SubmitHandler<FieldValues> = async ({
+  const submit: SubmitHandler<IFormValues> = async ({
     username,
     email,
     password,

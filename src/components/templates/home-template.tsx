@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { Box, Heading, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
-import { GlobalInfo } from 'components/organisms';
+import { Box, Heading, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { GlobalInfo, FeedInfo } from 'components/organisms';
 import { useAppSelector, useAuth } from 'hooks';
 import { IArticles } from 'types';
 import { tagsStateSelector } from 'app';
@@ -8,7 +8,7 @@ import { TagList } from 'components';
 
 interface IProps {
   data: IArticles | undefined;
-  isFetching: boolean;
+  dataFeed: IArticles | undefined;
   isLoading: boolean;
   isError: boolean;
   setOffset: Dispatch<SetStateAction<number>>;
@@ -19,7 +19,7 @@ interface IProps {
 
 export const HomeTemplate: FC<IProps> = ({
   data,
-  isFetching,
+  dataFeed,
   isError,
   isLoading,
   setOffset,
@@ -39,42 +39,52 @@ export const HomeTemplate: FC<IProps> = ({
   }
   return (
     <Box>
-      {!isLoading ? (
-        <Box display="flex">
-          <Tabs size="md">
-            <TabList>
-              <Tab>Global feed</Tab>
-              {user && <Tab>Your feed</Tab>}
-            </TabList>
-            <TabPanels>
+      <Box display="flex">
+        <Tabs size="md">
+          <TabList w="80vw">
+            <Tab>Global feed</Tab>
+            {user && <Tab>Your feed</Tab>}
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <GlobalInfo
+                articles={data?.articles || []}
+                numberOfArticles={data?.articlesCount || 0}
+                isLoaded={!isLoading}
+                setOffset={setOffset}
+                offset={offset}
+                setRange={setRange}
+                range={range}
+              />
+            </TabPanel>
+            {user && (
               <TabPanel>
-                <GlobalInfo
-                  articles={data?.articles || []}
-                  numberOfArticles={data?.articlesCount || 0}
-                  isLoaded={!isFetching}
+                <FeedInfo
+                  articles={dataFeed?.articles || []}
+                  numberOfArticles={dataFeed?.articlesCount || 0}
+                  isLoaded={!isLoading}
                   setOffset={setOffset}
                   offset={offset}
                   setRange={setRange}
                   range={range}
                 />
               </TabPanel>
-              {user && (
-                <TabPanel>
-                  <Box>your</Box>
-                </TabPanel>
-              )}
-            </TabPanels>
-          </Tabs>
-          <Box maxWidth="350px" p={5} borderLeftWidth={2} backgroundColor="#fafafa">
-            <Heading mb={5}>Popular tags</Heading>
-            <TagList isLoaded tagList={tags || []} large />
-          </Box>
+            )}
+          </TabPanels>
+        </Tabs>
+        <Box
+          maxWidth="20vw"
+          w="100%"
+          height="100%"
+          p={5}
+          borderLeftWidth={2}
+          borderBottomWidth={2}
+          backgroundColor="#fafafa"
+        >
+          <Heading mb={5}>Popular tags</Heading>
+          <TagList isLoaded tagList={tags || []} large />
         </Box>
-      ) : (
-        <Box display="flex" alignItems="center" justifyContent="center" w="100%" h="90vh">
-          <Spinner size="xl" />
-        </Box>
-      )}
+      </Box>
     </Box>
   );
 };

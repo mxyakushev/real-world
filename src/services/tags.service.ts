@@ -1,8 +1,7 @@
-import axios from 'axios';
-import { API_URL } from 'http';
+import { instance } from 'http';
 
 const getTags = async () => {
-  const response = await axios.get(`${API_URL}/tags`);
+  const response = await instance.get('/tags');
   return response.data.tags;
 };
 
