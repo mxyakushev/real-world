@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { articleService } from 'services';
+import { IPublishArticle } from '../../../types';
 
 export const getAllArticles = createAsyncThunk(
   'articles/getArticles',
@@ -13,6 +14,47 @@ export const getAllArticles = createAsyncThunk(
   }
 );
 
+export const getArticlesByTag = createAsyncThunk(
+  'articles/getArticlesByTag',
+  async ({ limit, offset, tag }: { limit: number; offset: number; tag: string }, thunkAPI) => {
+    try {
+      return await articleService.getArticlesByTag({ limit, offset, tag });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Error. Something went wrong';
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getArticlesProfile = createAsyncThunk(
+  'articles/getArticlesProfile',
+  async (
+    { limit, offset, username }: { limit: number; offset: number; username: string },
+    thunkAPI
+  ) => {
+    try {
+      return await articleService.getArticlesProfile({ limit, offset, username });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Error. Something went wrong';
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getArticlesFavorited = createAsyncThunk(
+  'articles/getArticlesFavorited',
+  async (
+    { limit, offset, username }: { limit: number; offset: number; username: string },
+    thunkAPI
+  ) => {
+    try {
+      return await articleService.getArticlesFavorited({ limit, offset, username });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Error. Something went wrong';
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 export const getArticlesFeed = createAsyncThunk(
   'articles/getArticlesFeed',
   async ({ limit, offset }: { limit: number; offset: number }, thunkAPI) => {
@@ -90,6 +132,51 @@ export const dislikeArticle = createAsyncThunk(
   async (slug: string, thunkAPI) => {
     try {
       return await articleService.dislikeArticle(slug);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Error. Something went wrong';
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const createOneArticle = createAsyncThunk(
+  'articles/createOneArticle',
+  async (body: IPublishArticle, thunkAPI) => {
+    try {
+      return await articleService.createArticle(body);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Error. Something went wrong';
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const editArticle = createAsyncThunk(
+  'articles/editArticle',
+  async (
+    {
+      body,
+      slug,
+    }: {
+      body: Omit<IPublishArticle, 'tags'>;
+      slug: string;
+    },
+    thunkAPI
+  ) => {
+    try {
+      return await articleService.editArticle({ body, slug });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Error. Something went wrong';
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const deleteArticle = createAsyncThunk(
+  'articles/deleteArticle',
+  async (slug: string, thunkAPI) => {
+    try {
+      return await articleService.deleteArticle(slug);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Error. Something went wrong';
       return thunkAPI.rejectWithValue(message);

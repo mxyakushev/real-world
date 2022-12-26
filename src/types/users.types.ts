@@ -12,3 +12,13 @@ export interface IUserRegister {
     password: string;
   };
 }
+
+export interface IUserChange {
+  user: {
+    email: string;
+    password: string;
+    username: string;
+    bio: string;
+    image: string;
+  };
+}

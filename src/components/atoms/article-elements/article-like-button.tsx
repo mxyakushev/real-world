@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Box, Button, Skeleton } from '@chakra-ui/react';
 import { AiOutlineLike } from 'react-icons/ai';
 import { useAppDispatch, useAuth } from 'hooks';

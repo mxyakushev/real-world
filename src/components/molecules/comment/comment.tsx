@@ -1,10 +1,9 @@
 import React, { FC } from 'react';
-import { Box } from '@chakra-ui/react';
+import { Box, Image } from '@chakra-ui/react';
 import { IAuthor } from 'types';
 import { RiDeleteBin2Line } from 'react-icons/ri';
 import { useAppDispatch, useAuth } from 'hooks';
 import { deleteOneComment } from 'app';
-import { User } from '../user';
 
 interface IProps {
   createdAt: Date;
@@ -38,7 +37,13 @@ export const Comment: FC<IProps> = ({ slug, id, body, author, createdAt }) => {
         cursor="pointer"
         _hover={{ backgroundColor: 'red.300' }}
       >
-        <User isLoaded author={author} createdAt={createdAt} size="sm" />
+        <Box>
+          <Image src={author.image} w={10} />
+          <Box>
+            <span>{author.username}</span>
+            <span>{createdAt.toString().slice(0, 10)}</span>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

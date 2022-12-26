@@ -1,6 +1,6 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { FC, useState } from 'react';
 import { Box, Heading, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
-import { GlobalInfo, FeedInfo } from 'components/organisms';
+import { ArticlesHome } from 'components/organisms';
 import { useAppSelector, useAuth } from 'hooks';
 import { IArticles } from 'types';
 import { tagsStateSelector } from 'app';
@@ -9,26 +9,24 @@ import { TagList } from 'components';
 interface IProps {
   data: IArticles | undefined;
   dataFeed: IArticles | undefined;
+  dataTags: IArticles | undefined;
   isLoading: boolean;
   isError: boolean;
-  setOffset: Dispatch<SetStateAction<number>>;
-  offset: number;
-  setRange: Dispatch<SetStateAction<number>>;
-  range: number;
 }
 
-export const HomeTemplate: FC<IProps> = ({
-  data,
-  dataFeed,
-  isError,
-  isLoading,
-  setOffset,
-  offset,
-  setRange,
-  range,
-}) => {
+export const HomeTemplate: FC<IProps> = ({ data, dataFeed, dataTags, isError, isLoading }) => {
   const user = useAuth();
   const tags = useAppSelector(tagsStateSelector);
+  const [tagsArticles, setTagsArticles] = useState<null | string>(null);
+
+  const [globalOffset, setGlobalOffset] = useState(0);
+  const [globalRange, setGlobalRange] = useState(5);
+
+  const [feedOffset, setFeedOffset] = useState(0);
+  const [feedRange, setFeedRange] = useState(5);
+
+  const [tagOffset, setTagOffset] = useState(0);
+  const [tagRange, setTagRange] = useState(5);
 
   if (isError) {
     return (
@@ -42,31 +40,51 @@ export const HomeTemplate: FC<IProps> = ({
       <Box display="flex">
         <Tabs size="md">
           <TabList w="80vw">
-            <Tab>Global feed</Tab>
-            {user && <Tab>Your feed</Tab>}
+            <Tab onClick={() => setTagsArticles(null)}>Global feed</Tab>
+            {user && <Tab onClick={() => setTagsArticles(null)}>Your feed</Tab>}
+            {tagsArticles && <Tab>#{tagsArticles}</Tab>}
           </TabList>
           <TabPanels>
             <TabPanel>
-              <GlobalInfo
+              <ArticlesHome
                 articles={data?.articles || []}
                 numberOfArticles={data?.articlesCount || 0}
                 isLoaded={!isLoading}
-                setOffset={setOffset}
-                offset={offset}
-                setRange={setRange}
-                range={range}
+                setOffset={setGlobalOffset}
+                offset={globalOffset}
+                setRange={setGlobalRange}
+                range={globalRange}
+                articlesType="global"
+                maxRangeNumber={(data && Math.ceil(data.articlesCount / 10)) || 0}
               />
             </TabPanel>
             {user && (
               <TabPanel>
-                <FeedInfo
+                <ArticlesHome
                   articles={dataFeed?.articles || []}
                   numberOfArticles={dataFeed?.articlesCount || 0}
                   isLoaded={!isLoading}
-                  setOffset={setOffset}
-                  offset={offset}
-                  setRange={setRange}
-                  range={range}
+                  setOffset={setFeedOffset}
+                  offset={feedOffset}
+                  setRange={setFeedRange}
+                  range={feedRange}
+                  articlesType="your"
+                  maxRangeNumber={(dataFeed && Math.ceil(dataFeed.articlesCount / 10)) || 0}
+                />
+              </TabPanel>
+            )}
+            {tagsArticles && (
+              <TabPanel>
+                <ArticlesHome
+                  articles={dataTags?.articles || []}
+                  numberOfArticles={dataTags?.articlesCount || 0}
+                  isLoaded={!isLoading}
+                  setOffset={setTagOffset}
+                  offset={tagOffset}
+                  setRange={setTagRange}
+                  range={tagRange}
+                  articlesType="tag"
+                  maxRangeNumber={(dataTags && Math.ceil(dataTags.articlesCount / 10)) || 0}
                 />
               </TabPanel>
             )}
@@ -82,7 +100,7 @@ export const HomeTemplate: FC<IProps> = ({
           backgroundColor="#fafafa"
         >
           <Heading mb={5}>Popular tags</Heading>
-          <TagList isLoaded tagList={tags || []} large />
+          <TagList setTagsArticles={setTagsArticles} isLoaded tagList={tags || []} large />
         </Box>
       </Box>
     </Box>

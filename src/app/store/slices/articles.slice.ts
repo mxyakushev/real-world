@@ -2,10 +2,16 @@ import { AnyAction, createSlice } from '@reduxjs/toolkit';
 import { IArticle, IArticles, IComments } from 'types';
 import {
   commentArticle,
+  createOneArticle,
+  deleteArticle,
   deleteOneComment,
   dislikeArticle,
+  editArticle,
   getAllArticles,
+  getArticlesByTag,
+  getArticlesFavorited,
   getArticlesFeed,
+  getArticlesProfile,
   getCommentsOnArticle,
   getSingleArticle,
   likeArticle,
@@ -13,8 +19,11 @@ import {
 
 interface ArticlesState {
   articles: IArticles;
+  articlesProfile: IArticles;
   singleArticle: { article: IArticle } | null;
   articlesFeed: IArticles;
+  articlesFavorited: IArticles;
+  articlesTag: IArticles;
   comments: IComments | null;
   isError: boolean;
   isSuccess: boolean;
@@ -27,6 +36,9 @@ interface ArticlesState {
 const initialState: ArticlesState = {
   articles: { articles: [], articlesCount: 0 },
   articlesFeed: { articles: [], articlesCount: 0 },
+  articlesProfile: { articles: [], articlesCount: 0 },
+  articlesFavorited: { articles: [], articlesCount: 0 },
+  articlesTag: { articles: [], articlesCount: 0 },
   singleArticle: null,
   comments: { comments: [] },
   isError: false,
@@ -43,19 +55,31 @@ export const articlesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // .addCase(createOneArticle.pending, (state) => {
-      //   state.isLoading = true;
-      // })
-      // .addCase(deleteArticle.pending, (state) => {
-      //   state.isLoading = true;
-      // })
+      .addCase(createOneArticle.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(editArticle.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteArticle.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getSingleArticle.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getAllArticles.pending, (state) => {
         state.isLoading = true;
       })
+      .addCase(getArticlesByTag.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getArticlesProfile.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getArticlesFeed.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getArticlesFavorited.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(commentArticle.pending, (state) => {
@@ -70,14 +94,14 @@ export const articlesSlice = createSlice({
       .addCase(dislikeArticle.pending, (state) => {
         state.buttonLoading = true;
       })
-      // .addCase(deleteArticle.fulfilled, (state: ArticlesState, action: AnyAction) => {
-      //   state.isLoading = false;
-      //   state.isSuccess = true;
-      //   const articleIndex = state?.articles?.articles?.findIndex(
-      //     (article) => article?.slug === action?.payload?.slug
-      //   );
-      //   state?.articles?.articles.splice(articleIndex, 1);
-      // })
+      .addCase(deleteArticle.fulfilled, (state: ArticlesState, action: AnyAction) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        const articleIndex = state?.articles?.articles?.findIndex(
+          (article) => article?.slug === action?.payload?.slug
+        );
+        state?.articles?.articles.splice(articleIndex, 1);
+      })
       .addCase(likeArticle.fulfilled, (state: ArticlesState, action: AnyAction) => {
         state.buttonLoading = false;
         state.isSuccess = true;
@@ -99,6 +123,23 @@ export const articlesSlice = createSlice({
           return article;
         });
         state.articlesFeed.articles = state.articlesFeed?.articles?.map((article) => {
+          if (article.slug === action.payload.article.slug) {
+            state.singleArticle = {
+              article: {
+                ...article,
+                favorited: true,
+                favoritesCount: action.payload.article.favoritesCount,
+              },
+            };
+            return {
+              ...article,
+              favorited: true,
+              favoritesCount: action.payload.article.favoritesCount,
+            };
+          }
+          return article;
+        });
+        state.articlesProfile.articles = state.articlesProfile?.articles?.map((article) => {
           if (article.slug === action.payload.article.slug) {
             state.singleArticle = {
               article: {
@@ -153,11 +194,34 @@ export const articlesSlice = createSlice({
           }
           return article;
         });
+        state.articlesProfile.articles = state.articlesProfile?.articles?.map((article) => {
+          if (article.slug === action.payload.article.slug) {
+            state.singleArticle = {
+              article: {
+                ...article,
+                favorited: false,
+                favoritesCount: action.payload.article.favoritesCount,
+              },
+            };
+            return {
+              ...article,
+              favorited: false,
+              favoritesCount: action.payload.article.favoritesCount,
+            };
+          }
+          return article;
+        });
       })
       .addCase(getSingleArticle.fulfilled, (state: ArticlesState, action: AnyAction) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.singleArticle = action.payload;
+      })
+      .addCase(createOneArticle.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(editArticle.fulfilled, (state) => {
+        state.isLoading = false;
       })
       .addCase(commentArticle.fulfilled, (state: ArticlesState, action: AnyAction) => {
         state.commentLoading = false;
@@ -168,6 +232,21 @@ export const articlesSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.articles = action.payload;
+      })
+      .addCase(getArticlesByTag.fulfilled, (state: ArticlesState, action: AnyAction) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.articlesTag = action.payload;
+      })
+      .addCase(getArticlesFavorited.fulfilled, (state: ArticlesState, action: AnyAction) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.articlesFavorited = action.payload;
+      })
+      .addCase(getArticlesProfile.fulfilled, (state: ArticlesState, action: AnyAction) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.articlesProfile = action.payload;
       })
       .addCase(getArticlesFeed.fulfilled, (state: ArticlesState, action: AnyAction) => {
         state.isLoading = false;
@@ -199,12 +278,27 @@ export const articlesSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      // .addCase(deleteArticle.rejected, (state: ArticlesState, action: AnyAction) => {
-      //   state.isLoading = false;
-      //   state.isError = true;
-      //   state.message = action.payload;
-      // })
+      .addCase(deleteArticle.rejected, (state: ArticlesState, action: AnyAction) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
       .addCase(getAllArticles.rejected, (state: ArticlesState, action: AnyAction) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getArticlesByTag.rejected, (state: ArticlesState, action: AnyAction) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getArticlesFavorited.rejected, (state: ArticlesState, action: AnyAction) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getArticlesProfile.rejected, (state: ArticlesState, action: AnyAction) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -219,11 +313,6 @@ export const articlesSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      // .addCase(createOneArticle.rejected, (state: ArticlesState, action: AnyAction) => {
-      //   state.isLoading = false;
-      //   state.isError = true;
-      //   state.message = action.payload;
-      // })
       .addCase(deleteOneComment.rejected, (state: ArticlesState, action: AnyAction) => {
         state.isLoading = false;
         state.isError = true;
@@ -236,6 +325,16 @@ export const articlesSlice = createSlice({
       })
       .addCase(dislikeArticle.rejected, (state: ArticlesState, action: AnyAction) => {
         state.buttonLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(createOneArticle.rejected, (state: ArticlesState, action: AnyAction) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(editArticle.rejected, (state: ArticlesState, action: AnyAction) => {
+        state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       });

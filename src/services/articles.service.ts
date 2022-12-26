@@ -1,8 +1,69 @@
 import { instance } from 'http';
+import { IPublishArticle } from '../types';
 
 const getArticles = async ({ limit, offset }: { limit: number; offset: number }) => {
   const response = await instance
     .get(`/articles?limit=${limit}&offset=${offset}`)
+    .catch((err) => console.log(err));
+  return response?.data;
+};
+
+const getArticlesByTag = async ({
+  limit,
+  offset,
+  tag,
+}: {
+  limit: number;
+  offset: number;
+  tag: string;
+}) => {
+  const response = await instance
+    .get(`/articles?tag=${tag}&limit=${limit}&offset=${offset}`)
+    .catch((err) => console.log(err));
+  return response?.data;
+};
+
+const createArticle = async (body: IPublishArticle) => {
+  const response = await instance.post(`/articles`, body).catch((err) => console.log(err));
+  return response?.data;
+};
+
+const editArticle = async ({
+  body,
+  slug,
+}: {
+  body: Omit<IPublishArticle, 'tags'>;
+  slug: string;
+}) => {
+  const response = await instance.put(`/articles/${slug}`, body).catch((err) => console.log(err));
+  return response?.data;
+};
+const getArticlesProfile = async ({
+  limit,
+  offset,
+  username,
+}: {
+  limit: number;
+  offset: number;
+  username: string;
+}) => {
+  const response = await instance
+    .get(`/articles?author=${username}&limit=${limit}&offset=${offset}`)
+    .catch((err) => console.log(err));
+  return response?.data;
+};
+
+const getArticlesFavorited = async ({
+  limit,
+  offset,
+  username,
+}: {
+  limit: number;
+  offset: number;
+  username: string;
+}) => {
+  const response = await instance
+    .get(`/articles?favorited=${username}&limit=${limit}&offset=${offset}`)
     .catch((err) => console.log(err));
   return response?.data;
 };
@@ -52,6 +113,10 @@ const dislikeArticle = async (slug: string) => {
   return response?.data;
 };
 
+const deleteArticle = async (slug: string) => {
+  const response = await instance.delete(`/articles/${slug}`).catch((err) => console.log(err));
+  return response?.data;
+};
 export const articleService = {
   getArticleSlug,
   getArticles,
@@ -61,4 +126,10 @@ export const articleService = {
   getArticlesFeed,
   commentArticle,
   commentDelArticle,
+  getArticlesProfile,
+  getArticlesFavorited,
+  createArticle,
+  deleteArticle,
+  editArticle,
+  getArticlesByTag,
 };

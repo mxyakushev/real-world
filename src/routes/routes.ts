@@ -4,4 +4,7 @@ export const routes = {
   HOME: '/',
   SLUG: '/articles/:slug',
   ERROR: '/error',
+  PROFILE: '/profile/:username',
+  NEW_ARTICLE: '/new-article',
+  SETTINGS: '/settings',
 };

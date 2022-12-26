@@ -2,14 +2,14 @@ import React, { FC } from 'react';
 import { IArticle } from 'types';
 import { useNavigate } from 'react-router-dom';
 import { Box, Skeleton } from '@chakra-ui/react';
-import { User, ArticleLikeButton, TagList } from 'components';
+import { User, ArticleLikeButton, TagListArticle } from 'components';
 
 interface IProps {
   article: IArticle;
   isLoaded: boolean;
 }
 
-export const Article: FC<IProps> = ({ article, isLoaded}) => {
+export const Article: FC<IProps> = ({ article, isLoaded }) => {
   const { title, author, description, favoritesCount, favorited, slug, createdAt, tagList } =
     article;
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ export const Article: FC<IProps> = ({ article, isLoaded}) => {
           {description}
         </Skeleton>
       </Box>
-      <TagList isLoaded={isLoaded} tagList={tagList} />
+      <TagListArticle isLoaded={isLoaded} tagList={tagList} />
     </Box>
   );
 };

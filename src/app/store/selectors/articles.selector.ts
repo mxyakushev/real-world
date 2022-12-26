@@ -13,6 +13,21 @@ export const articlesFeedStateSelector = createDraftSafeSelector(
   (state) => state.articlesFeed
 );
 
+export const articlesTagStateSelector = createDraftSafeSelector(
+  articlesGeneralSelector,
+  (state) => state.articlesTag
+);
+
+export const articlesFavoritedStateSelector = createDraftSafeSelector(
+  articlesGeneralSelector,
+  (state) => state.articlesFavorited
+);
+
+export const articlesProfileStateSelector = createDraftSafeSelector(
+  articlesGeneralSelector,
+  (state) => state.articlesProfile
+);
+
 export const singleArticleStateSelector = createDraftSafeSelector(
   articlesGeneralSelector,
   (state) => state.singleArticle

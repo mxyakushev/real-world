@@ -1,6 +1,6 @@
 import { AnyAction, createSlice } from '@reduxjs/toolkit';
 
-import { login, register } from 'app/store';
+import { changeProfileSettings, login, register } from 'app/store';
 import { AuthState } from 'types';
 
 const user = JSON.parse(String(localStorage.getItem('user')));
@@ -32,6 +32,9 @@ export const authSlice = createSlice({
       .addCase(register.pending, (state: AuthState) => {
         state.isLoading = true;
       })
+      .addCase(changeProfileSettings.pending, (state: AuthState) => {
+        state.isLoading = true;
+      })
       .addCase(register.fulfilled, (state: AuthState, action: AnyAction) => {
         state.isLoading = false;
         state.isSuccess = true;
@@ -46,6 +49,11 @@ export const authSlice = createSlice({
       .addCase(login.pending, (state: AuthState) => {
         state.isLoading = true;
       })
+      .addCase(changeProfileSettings.fulfilled, (state: AuthState, action: AnyAction) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+      })
       .addCase(login.fulfilled, (state: AuthState, action: AnyAction) => {
         state.isLoading = false;
         state.isSuccess = true;
@@ -56,6 +64,10 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.user = null;
+      })
+      .addCase(changeProfileSettings.rejected, (state: AuthState) => {
+        state.isError = true;
+        state.isSuccess = false;
       });
   },
 });

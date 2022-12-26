@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Box, Button, Heading, Spinner } from '@chakra-ui/react';
-import { ArticleLikeButton, TagList, User, CommentList } from 'components';
-import { MdPersonAddAlt } from 'react-icons/md';
-import { useAppDispatch, useAppSelector } from 'hooks';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Box, Heading, Spinner, Button } from '@chakra-ui/react';
+import { ArticleLikeButton, User, CommentList, FollowButton, TagListArticle } from 'components';
+import { useAppDispatch, useAppSelector, useAuth } from 'hooks';
 import {
   articleCommentsStateSelector,
+  deleteArticle,
   errorArticlesStateSelector,
   errorMessageArticlesStateSelector,
   getAllArticles,
@@ -14,6 +14,7 @@ import {
   loadingArticlesStateSelector,
   singleArticleStateSelector,
 } from 'app';
+import { routes } from 'routes';
 
 const Slug = () => {
   const { slug } = useParams();
@@ -23,6 +24,8 @@ const Slug = () => {
   const isError = useAppSelector(errorArticlesStateSelector);
   const errorMessage = useAppSelector(errorMessageArticlesStateSelector);
   const dispatch = useAppDispatch();
+  const user = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (slug != null) {
@@ -65,10 +68,9 @@ const Slug = () => {
                 author={data.article.author}
                 createdAt={data.article.createdAt}
               />
-              <Button ml={4} mr={2}>
-                <MdPersonAddAlt size={22} />
-                <Box ml={1}>Follow</Box>
-              </Button>
+              {user?.user.username !== data.article.author.username && (
+                <FollowButton username={data.article.author.username} />
+              )}
               <ArticleLikeButton
                 isLoaded={!isLoading}
                 favorited={data.article.favorited}
@@ -76,10 +78,31 @@ const Slug = () => {
                 slug={slug || ''}
               />
               <Box pr={5} ml="auto">
-                <TagList isLoaded={!isLoading} tagList={data.article.tagList || []} />
+                <TagListArticle isLoaded={!isLoading} tagList={data.article.tagList || []} />
               </Box>
             </Box>
           </Box>
+          {user?.user.username === data.article.author.username && (
+            <>
+              <Button
+                onClick={() =>
+                  navigate(routes.NEW_ARTICLE, {
+                    state: { article: data.article },
+                  })
+                }
+              >
+                edit
+              </Button>
+              <Button
+                onClick={async () => {
+                  await dispatch(deleteArticle(slug as string));
+                  navigate(routes.HOME);
+                }}
+              >
+                delete
+              </Button>
+            </>
+          )}
           <Heading size="xl" textAlign="center" mb={5}>
             Comments
           </Heading>
