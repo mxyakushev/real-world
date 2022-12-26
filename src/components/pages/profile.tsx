@@ -18,6 +18,10 @@ import { FollowButton } from '../atoms';
 const Profile = () => {
   const [offset, setOffset] = useState(0);
   const [rangeNumber, setRangeNumber] = useState(5);
+
+  const [favoritedOffset, setFavoritedOffset] = useState(0);
+  const [rangeNumberFavorited, setRangeNumberFavorited] = useState(5);
+
   const { username } = useParams();
   const user = useAuth();
   const dispatch = useAppDispatch();
@@ -31,9 +35,9 @@ const Profile = () => {
     if (username) {
       dispatch(getProfile(username));
       dispatch(getArticlesProfile({ limit: 10, offset: offset * 10, username }));
-      dispatch(getArticlesFavorited({ limit: 10, offset: offset * 10, username }));
+      dispatch(getArticlesFavorited({ limit: 10, offset: favoritedOffset * 10, username }));
     }
-  }, [dispatch, offset, username]);
+  }, [dispatch, favoritedOffset, offset, username]);
 
   if (isLoading && !profile) {
     return <h1>loading</h1>;
@@ -65,9 +69,9 @@ const Profile = () => {
                 <Pagination
                   setOffset={setOffset}
                   offset={offset}
-                  numberOfArticles={articles?.articlesCount}
                   setRange={setRangeNumber}
                   range={rangeNumber}
+                  maxRangeNumber={Math.ceil(articles.articlesCount / 10) || 0}
                 />
               )}
           </TabPanel>
@@ -78,11 +82,11 @@ const Profile = () => {
               articlesFavorited?.articlesCount > 10 &&
               articlesFavorited.articles.length !== 0 && (
                 <Pagination
-                  setOffset={setOffset}
-                  offset={offset}
-                  numberOfArticles={articles?.articlesCount}
-                  setRange={setRangeNumber}
-                  range={rangeNumber}
+                  setOffset={setFavoritedOffset}
+                  offset={favoritedOffset}
+                  setRange={setRangeNumberFavorited}
+                  range={rangeNumberFavorited}
+                  maxRangeNumber={Math.ceil(articlesFavorited.articlesCount / 10) || 0}
                 />
               )}
           </TabPanel>

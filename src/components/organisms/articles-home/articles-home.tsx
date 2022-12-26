@@ -32,7 +32,6 @@ export const ArticlesHome: FC<IProps> = ({
   articlesType,
   maxRangeNumber,
 }) => {
-  console.log(maxRangeNumber);
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (articlesType === 'global') {
@@ -52,9 +51,9 @@ export const ArticlesHome: FC<IProps> = ({
         <Pagination
           setOffset={setOffset}
           offset={offset}
-          numberOfArticles={numberOfArticles}
           setRange={setRange}
           range={range}
+          maxRangeNumber={maxRangeNumber}
         />
       )}
     </Box>

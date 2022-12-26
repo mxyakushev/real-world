@@ -85,6 +85,7 @@ export const HomeTemplate: FC<IProps> = ({ data, dataFeed, dataTags, isError, is
                   range={tagRange}
                   articlesType="tag"
                   maxRangeNumber={(dataTags && Math.ceil(dataTags.articlesCount / 10)) || 0}
+                  tag={tagsArticles}
                 />
               </TabPanel>
             )}
