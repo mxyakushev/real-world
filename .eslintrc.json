@@ -72,6 +72,9 @@
         "no-underscore-dangle": "off",
         "import/extensions": "off",
         "jsx-a11y/anchor-is-valid": "off",
-        "import/named": "off"
+        "import/named": "off",
+        "react/destructuring-assignment": "off",
+        "react/state-in-constructor": "off",
+        "@typescript-eslint/no-throw-literal": "off"
     }
 }
