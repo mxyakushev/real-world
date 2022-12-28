@@ -21,7 +21,11 @@ const initialState: IState = {
 export const profileSlice = createSlice({
   name: 'profiles',
   initialState,
-  reducers: {},
+  reducers: {
+    resetProfile(state: IState) {
+      state.profile = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getProfile.pending, (state: IState) => {
@@ -59,4 +63,6 @@ export const profileSlice = createSlice({
       });
   },
 });
+
+export const { resetProfile } = profileSlice.actions;
 export const ProfilesReducer = profileSlice.reducer;

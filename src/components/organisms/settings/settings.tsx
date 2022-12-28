@@ -76,7 +76,7 @@ const Settings = () => {
       textAlign="center"
     >
       <form onSubmit={handleSubmit(submit)} style={{ width: '100%' }}>
-        <Heading as="h2" size="2xl" mb={2}>
+        <Heading as="h2" size="2xl" mb={5}>
           Profile Settings
         </Heading>
         <FormInput control={control} errors={errors} name="image" placeholder="image" type="text" />

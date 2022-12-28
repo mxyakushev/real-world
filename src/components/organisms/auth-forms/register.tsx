@@ -85,13 +85,15 @@ const Register = () => {
 
   return (
     <Box
-      w="400px"
+      maxWidth="400px"
+      w="100%"
       h="80%"
       display="flex"
       alignItems="center"
       justifyContent="center"
       mx="auto"
       textAlign="center"
+      px={4}
     >
       {showError ? (
         <Box textAlign="center">
@@ -144,7 +146,7 @@ const Register = () => {
             placeholder="Password"
             type="password"
           />
-          <Button type="submit" w="100%" disabled={authLoading}>
+          <Button type="submit" w="100%" disabled={authLoading} borderRadius={0}>
             register
           </Button>
         </form>

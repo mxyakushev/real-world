@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from 'hooks';
 import { createOneArticle, editArticle } from 'app/store/thunks';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormInput } from 'components/molecules';
+import { FormInput, FormTextarea } from 'components/molecules';
 import { loadingArticlesStateSelector } from 'app';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { routes } from 'routes';
@@ -55,15 +55,17 @@ const NewArticle = () => {
         title,
         description: about,
         body: text,
-        tagList: [tags],
+        tagList: tags.split(','),
       },
     };
     if (dataToEdit.state) {
-      await dispatch(editArticle({ body, slug: dataToEdit.state.article.slug }));
+      await dispatch(editArticle({ body, slug: dataToEdit.state.article.slug })).then((r) =>
+        navigate(`/singleArticle/${r.payload.article.slug}`)
+      );
     } else {
       await dispatch(createOneArticle(body));
+      navigate(routes.HOME);
     }
-    navigate(routes.HOME);
   };
 
   return (
@@ -77,7 +79,7 @@ const NewArticle = () => {
       textAlign="center"
     >
       <form onSubmit={handleSubmit(submit)} style={{ width: '100%' }}>
-        <Heading as="h2" size="2xl" mb={2}>
+        <Heading as="h2" size="2xl" mb={5}>
           {dataToEdit.state ? 'Edit Article' : 'Create Article'}
         </Heading>
         <FormInput
@@ -87,19 +89,17 @@ const NewArticle = () => {
           placeholder="Article Title"
           type="text"
         />
-        <FormInput
+        <FormTextarea
           control={control}
           errors={errors}
           name="about"
           placeholder="What's this article about"
-          type="text"
         />
-        <FormInput
+        <FormTextarea
           control={control}
           errors={errors}
           name="text"
           placeholder="Write your article"
-          type="text"
         />
         <FormInput
           control={control}

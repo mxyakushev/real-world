@@ -3,6 +3,8 @@ import { IArticle } from 'types';
 import { useNavigate } from 'react-router-dom';
 import { Box, Skeleton } from '@chakra-ui/react';
 import { User, ArticleLikeButton, TagListArticle } from 'components';
+import { useAppDispatch } from 'hooks';
+import { resetSingleArticle } from 'app';
 
 interface IProps {
   article: IArticle;
@@ -13,6 +15,7 @@ export const Article: FC<IProps> = ({ article, isLoaded }) => {
   const { title, author, description, favoritesCount, favorited, slug, createdAt, tagList } =
     article;
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   return (
     <Box
@@ -20,9 +23,10 @@ export const Article: FC<IProps> = ({ article, isLoaded }) => {
       borderWidth={2}
       borderColor="#ebebeb"
       padding={5}
-      borderRadius={5}
+      borderRadius={0}
       onClick={() => {
-        navigate(`/articles/${slug}`);
+        dispatch(resetSingleArticle());
+        navigate(`/singleArticle/${slug}`);
       }}
     >
       <Box display="flex" justifyContent="space-between">

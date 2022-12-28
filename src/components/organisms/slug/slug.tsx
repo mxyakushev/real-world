@@ -15,6 +15,8 @@ import {
   singleArticleStateSelector,
 } from 'app';
 import { routes } from 'routes';
+import { RiDeleteBin2Line } from 'react-icons/ri';
+import { BiEditAlt } from 'react-icons/bi';
 
 const Slug = () => {
   const { slug } = useParams();
@@ -55,58 +57,75 @@ const Slug = () => {
     <Box p={5}>
       {data && comments && (
         <>
-          <Box borderWidth={2} borderRadius={5} mb={5}>
+          <Box borderWidth={2} borderRadius={0} mb={5}>
             <Box fontSize="20px" fontWeight="700" mb={5} px={5} pt={5}>
               {data.article.title}
             </Box>
             <Box fontSize="18px" mb={5} px={5}>
               {data.article.body}
             </Box>
-            <Box display="flex" alignItems="center" mb={5} px={5}>
-              <User
-                isLoaded={!isLoading}
-                author={data.article.author}
-                createdAt={data.article.createdAt}
-              />
-              {user?.user.username !== data.article.author.username && (
-                <FollowButton username={data.article.author.username} />
-              )}
-              <ArticleLikeButton
-                isLoaded={!isLoading}
-                favorited={data.article.favorited}
-                favoritesCount={data.article.favoritesCount}
-                slug={slug || ''}
-              />
-              <Box pr={5} ml="auto">
+            <Box display="flex" alignItems="center" flexWrap="wrap" mb={5} px={5}>
+              <Box w="full">
+                <Box mb={5} mr={4}>
+                  <User
+                    isLoaded={!isLoading}
+                    author={data.article.author}
+                    createdAt={data.article.createdAt}
+                  />
+                </Box>
+                <Box display="flex" mb={5}>
+                  {user?.user.username !== data.article.author.username && (
+                    <Box mr={4}>
+                      <FollowButton username={data.article.author.username} />
+                    </Box>
+                  )}
+                  <Box mr={4}>
+                    <ArticleLikeButton
+                      isLoaded={!isLoading}
+                      favorited={data.article.favorited}
+                      favoritesCount={data.article.favoritesCount}
+                      slug={slug || ''}
+                    />
+                  </Box>
+                  {user?.user.username === data.article.author.username && (
+                    <>
+                      <Button
+                        mr={3}
+                        onClick={() =>
+                          navigate(routes.NEW_ARTICLE, {
+                            state: { article: data.article },
+                          })
+                        }
+                      >
+                        <Box mr={2}>
+                          <BiEditAlt size={24} />
+                        </Box>
+                        Edit
+                      </Button>
+                      <Button
+                        onClick={async () => {
+                          await dispatch(deleteArticle(slug as string));
+                          navigate(routes.HOME);
+                        }}
+                      >
+                        <Box mr={2}>
+                          <RiDeleteBin2Line size={24} />
+                        </Box>
+                        Delete
+                      </Button>
+                    </>
+                  )}
+                </Box>
+              </Box>
+              <Box pr={5} ml={-2}>
                 <TagListArticle isLoaded={!isLoading} tagList={data.article.tagList || []} />
               </Box>
             </Box>
           </Box>
-          {user?.user.username === data.article.author.username && (
-            <>
-              <Button
-                onClick={() =>
-                  navigate(routes.NEW_ARTICLE, {
-                    state: { article: data.article },
-                  })
-                }
-              >
-                edit
-              </Button>
-              <Button
-                onClick={async () => {
-                  await dispatch(deleteArticle(slug as string));
-                  navigate(routes.HOME);
-                }}
-              >
-                delete
-              </Button>
-            </>
-          )}
           <Heading size="xl" textAlign="center" mb={5}>
             Comments
           </Heading>
-          <Box px={5}>
+          <Box>
             <CommentList comments={comments} slug={slug || ''} />
           </Box>
         </>

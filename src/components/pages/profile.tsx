@@ -1,97 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useParams, Outlet } from 'react-router-dom';
 import { useAppDispatch, useAppSelector, useAuth } from 'hooks';
-import {
-  articlesFavoritedStateSelector,
-  articlesProfileStateSelector,
-  getArticlesFavorited,
-  getArticlesProfile,
-  getProfile,
-  loadingArticlesStateSelector,
-  profileLoadingStateSelector,
-  profileStateSelector,
-} from 'app';
-import { Box, Heading, Image, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
-import { ArticleList, Pagination } from 'components';
+import { getProfile, profileLoadingStateSelector, profileStateSelector } from 'app';
+import { Avatar, Box, Heading, Spinner, Button } from '@chakra-ui/react';
 import { FollowButton } from '../atoms';
 
 const Profile = () => {
-  const [offset, setOffset] = useState(0);
-  const [rangeNumber, setRangeNumber] = useState(5);
-
-  const [favoritedOffset, setFavoritedOffset] = useState(0);
-  const [rangeNumberFavorited, setRangeNumberFavorited] = useState(5);
-
   const { username } = useParams();
   const user = useAuth();
   const dispatch = useAppDispatch();
   const profile = useAppSelector(profileStateSelector);
-  const isLoading = useAppSelector(profileLoadingStateSelector);
-  const articles = useAppSelector(articlesProfileStateSelector);
-  const articlesFavorited = useAppSelector(articlesFavoritedStateSelector);
-  const articlesLoading = useAppSelector(loadingArticlesStateSelector);
+  const profileLoading = useAppSelector(profileLoadingStateSelector);
 
   useEffect(() => {
     if (username) {
       dispatch(getProfile(username));
-      dispatch(getArticlesProfile({ limit: 10, offset: offset * 10, username }));
-      dispatch(getArticlesFavorited({ limit: 10, offset: favoritedOffset * 10, username }));
     }
-  }, [dispatch, favoritedOffset, offset, username]);
+  }, [dispatch, username]);
 
-  if (isLoading && !profile) {
-    return <h1>loading</h1>;
-  }
-  return (
-    <Box p={5}>
-      <Box display="flex" alignItems="center" mb={4}>
-        <Box mr={3} rounded="100%" overflow="hidden">
-          <Image src={profile?.profile.image} w={12} />
-        </Box>
-        <Heading>{profile?.profile.username}</Heading>
-        {profile?.profile && profile.profile.username !== user?.user.username && (
-          <FollowButton username={profile.profile.username} />
-        )}
+  if (profileLoading) {
+    return (
+      <Box display="flex" h="90vh" justifyContent="center" alignItems="center">
+        <Spinner size="xl" />
       </Box>
-      <Box>{profile?.profile.bio}</Box>
-      <Tabs size="md">
-        <TabList w="80vw">
-          <Tab>Articles</Tab>
-          <Tab>Favourites</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <ArticleList articles={articles?.articles} isLoaded />
-            {!articlesLoading &&
-              articles &&
-              articles?.articlesCount > 10 &&
-              articles.articles.length !== 0 && (
-                <Pagination
-                  setOffset={setOffset}
-                  offset={offset}
-                  setRange={setRangeNumber}
-                  range={rangeNumber}
-                  maxRangeNumber={Math.ceil(articles.articlesCount / 10) || 0}
-                />
-              )}
-          </TabPanel>
-          <TabPanel>
-            <ArticleList articles={articlesFavorited?.articles} isLoaded />
-            {!articlesLoading &&
-              articlesFavorited &&
-              articlesFavorited?.articlesCount > 10 &&
-              articlesFavorited.articles.length !== 0 && (
-                <Pagination
-                  setOffset={setFavoritedOffset}
-                  offset={favoritedOffset}
-                  setRange={setRangeNumberFavorited}
-                  range={rangeNumberFavorited}
-                  maxRangeNumber={Math.ceil(articlesFavorited.articlesCount / 10) || 0}
-                />
-              )}
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+    );
+  }
+
+  return (
+    <Box py={5}>
+      <Box p={5} mx="auto" maxWidth="500px">
+        <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
+          <Avatar mr={2} boxSize={140} src={profile?.profile.image} />
+          <Box>
+            <Heading mb={3}>{profile?.profile.username}</Heading>
+            {profile?.profile && profile.profile.username !== user?.user.username && (
+              <FollowButton username={profile.profile.username} />
+            )}
+            {profile?.profile.bio && <Box textAlign="center">{profile?.profile.bio}</Box>}
+          </Box>
+        </Box>
+        <Box display="flex" justifyContent="center">
+          <Link to={`/profile/${username}/articles`}>
+            <Button mr={2}>Profile articles</Button>
+          </Link>
+          <Link to={`/profile/${username}/favorited`}>
+            <Button ml={2}>Favorited articles</Button>
+          </Link>
+        </Box>
+      </Box>
+      <Outlet />
     </Box>
   );
 };

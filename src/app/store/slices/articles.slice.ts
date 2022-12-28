@@ -52,7 +52,11 @@ const initialState: ArticlesState = {
 export const articlesSlice = createSlice({
   name: 'articles',
   initialState,
-  reducers: {},
+  reducers: {
+    resetSingleArticle(state: ArticlesState) {
+      state.singleArticle = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createOneArticle.pending, (state) => {
@@ -156,6 +160,23 @@ export const articlesSlice = createSlice({
           }
           return article;
         });
+        state.articlesFavorited.articles = state.articlesFavorited?.articles?.map((article) => {
+          if (article.slug === action.payload.article.slug) {
+            state.singleArticle = {
+              article: {
+                ...article,
+                favorited: true,
+                favoritesCount: action.payload.article.favoritesCount,
+              },
+            };
+            return {
+              ...article,
+              favorited: true,
+              favoritesCount: action.payload.article.favoritesCount,
+            };
+          }
+          return article;
+        });
       })
       .addCase(dislikeArticle.fulfilled, (state: ArticlesState, action: AnyAction) => {
         state.buttonLoading = false;
@@ -195,6 +216,23 @@ export const articlesSlice = createSlice({
           return article;
         });
         state.articlesProfile.articles = state.articlesProfile?.articles?.map((article) => {
+          if (article.slug === action.payload.article.slug) {
+            state.singleArticle = {
+              article: {
+                ...article,
+                favorited: false,
+                favoritesCount: action.payload.article.favoritesCount,
+              },
+            };
+            return {
+              ...article,
+              favorited: false,
+              favoritesCount: action.payload.article.favoritesCount,
+            };
+          }
+          return article;
+        });
+        state.articlesFavorited.articles = state.articlesFavorited?.articles?.map((article) => {
           if (article.slug === action.payload.article.slug) {
             state.singleArticle = {
               article: {
@@ -340,5 +378,7 @@ export const articlesSlice = createSlice({
       });
   },
 });
+
+export const { resetSingleArticle } = articlesSlice.actions;
 
 export const ArticleReducer = articlesSlice.reducer;

@@ -1,107 +1,91 @@
-import React, { FC, useState } from 'react';
-import { Box, Heading, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
-import { ArticlesHome } from 'components/organisms';
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Popover,
+  PopoverBody,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverArrow,
+  PopoverCloseButton,
+  Button,
+} from '@chakra-ui/react';
 import { useAppSelector, useAuth } from 'hooks';
-import { IArticles } from 'types';
 import { tagsStateSelector } from 'app';
 import { TagList } from 'components';
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 
-interface IProps {
-  data: IArticles | undefined;
-  dataFeed: IArticles | undefined;
-  dataTags: IArticles | undefined;
-  isLoading: boolean;
-  isError: boolean;
-}
-
-export const HomeTemplate: FC<IProps> = ({ data, dataFeed, dataTags, isError, isLoading }) => {
+export const HomeTemplate = () => {
   const user = useAuth();
+  const { tabName } = useParams();
   const tags = useAppSelector(tagsStateSelector);
+  const navigate = useNavigate();
   const [tagsArticles, setTagsArticles] = useState<null | string>(null);
+  const activeTab = useParams();
 
-  const [globalOffset, setGlobalOffset] = useState(0);
-  const [globalRange, setGlobalRange] = useState(5);
+  useEffect(() => {
+    if (tabName === 'tag' && !tagsArticles) {
+      navigate('/');
+    }
+  }, [navigate, tabName, tagsArticles]);
 
-  const [feedOffset, setFeedOffset] = useState(0);
-  const [feedRange, setFeedRange] = useState(5);
-
-  const [tagOffset, setTagOffset] = useState(0);
-  const [tagRange, setTagRange] = useState(5);
-
-  if (isError) {
-    return (
-      <Box width="100%" height="90vh" display="flex" justifyContent="center" alignItems="center">
-        <Heading>Something went wrong :(</Heading>
-      </Box>
-    );
-  }
   return (
     <Box>
       <Box display="flex">
-        <Tabs size="md">
-          <TabList w="80vw">
-            <Tab onClick={() => setTagsArticles(null)}>Global feed</Tab>
-            {user && <Tab onClick={() => setTagsArticles(null)}>Your feed</Tab>}
-            {tagsArticles && <Tab>#{tagsArticles}</Tab>}
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              <ArticlesHome
-                articles={data?.articles || []}
-                numberOfArticles={data?.articlesCount || 0}
-                isLoaded={!isLoading}
-                setOffset={setGlobalOffset}
-                offset={globalOffset}
-                setRange={setGlobalRange}
-                range={globalRange}
-                articlesType="global"
-                maxRangeNumber={(data && Math.ceil(data.articlesCount / 10)) || 0}
-              />
-            </TabPanel>
-            {user && (
-              <TabPanel>
-                <ArticlesHome
-                  articles={dataFeed?.articles || []}
-                  numberOfArticles={dataFeed?.articlesCount || 0}
-                  isLoaded={!isLoading}
-                  setOffset={setFeedOffset}
-                  offset={feedOffset}
-                  setRange={setFeedRange}
-                  range={feedRange}
-                  articlesType="your"
-                  maxRangeNumber={(dataFeed && Math.ceil(dataFeed.articlesCount / 10)) || 0}
-                />
-              </TabPanel>
-            )}
-            {tagsArticles && (
-              <TabPanel>
-                <ArticlesHome
-                  articles={dataTags?.articles || []}
-                  numberOfArticles={dataTags?.articlesCount || 0}
-                  isLoaded={!isLoading}
-                  setOffset={setTagOffset}
-                  offset={tagOffset}
-                  setRange={setTagRange}
-                  range={tagRange}
-                  articlesType="tag"
-                  maxRangeNumber={(dataTags && Math.ceil(dataTags.articlesCount / 10)) || 0}
-                  tag={tagsArticles}
-                />
-              </TabPanel>
-            )}
-          </TabPanels>
-        </Tabs>
-        <Box
-          maxWidth="20vw"
-          w="100%"
-          height="100%"
-          p={5}
-          borderLeftWidth={2}
-          borderBottomWidth={2}
-          backgroundColor="#fafafa"
-        >
-          <Heading mb={5}>Popular tags</Heading>
-          <TagList setTagsArticles={setTagsArticles} isLoaded tagList={tags || []} large />
+        <Box>
+          <Box w="100vw" p={4} display="flex" justifyContent="space-between">
+            <Box display="inline-block">
+              <Link to="/articles/global" onClick={() => setTagsArticles(null)}>
+                <Box
+                  p={2}
+                  display="inline-block"
+                  backgroundColor={activeTab.tabName === 'global' ? 'red.200' : 'white'}
+                >
+                  Global feed
+                </Box>
+              </Link>
+              {user && (
+                <Link to="/articles/feed" onClick={() => setTagsArticles(null)}>
+                  <Box
+                    p={2}
+                    display="inline-block"
+                    backgroundColor={activeTab.tabName === 'feed' ? 'red.200' : 'white'}
+                  >
+                    Your feed
+                  </Box>
+                </Link>
+              )}
+              {tagsArticles && (
+                <Link to="/articles/tag">
+                  <Box
+                    p={2}
+                    display="inline-block"
+                    backgroundColor={activeTab.tabName === 'tag' ? 'red.200' : 'white'}
+                  >
+                    #{tagsArticles}
+                  </Box>
+                </Link>
+              )}
+            </Box>
+            <Popover>
+              <PopoverTrigger>
+                <Button borderRadius={0} minWidth="120px">
+                  Popular tags
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent mr={6}>
+                <PopoverArrow />
+                <PopoverCloseButton size="lg" />
+                <PopoverHeader py={3} fontSize="20px">
+                  Tags
+                </PopoverHeader>
+                <PopoverBody>
+                  <TagList setTagsArticles={setTagsArticles} isLoaded tagList={tags || []} large />
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </Box>
+          <Outlet context={tagsArticles} />
         </Box>
       </Box>
     </Box>

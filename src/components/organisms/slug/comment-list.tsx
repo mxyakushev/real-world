@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { ChangeEvent, FC, useState, useMemo } from 'react';
 import { Box, Textarea, Button, Heading } from '@chakra-ui/react';
 import { IComments } from 'types';
 import { Comment } from 'components';
@@ -21,6 +21,25 @@ export const CommentList: FC<IProps> = ({ comments, slug }) => {
     }
     setTextareaValue('');
   };
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setTextareaValue(e.target.value);
+  };
+
+  const showComments = useMemo(() => {
+    return comments?.comments.map(({ id, createdAt, body, author }) => {
+      return (
+        <Comment
+          key={Math.random()}
+          createdAt={createdAt}
+          body={body}
+          author={author}
+          id={id}
+          slug={slug}
+        />
+      );
+    });
+  }, [comments?.comments, slug]);
+
   return (
     <Box pb={5}>
       {!user ? (
@@ -47,7 +66,7 @@ export const CommentList: FC<IProps> = ({ comments, slug }) => {
             maxWidth="700px"
             placeholder="Enter the comment"
             mb={3}
-            onChange={(e) => setTextareaValue(e.target.value)}
+            onChange={handleChange}
             value={textareaValue}
           />
           <Button maxWidth="700px" w="100%" onClick={handleSubmitComment}>
@@ -55,22 +74,7 @@ export const CommentList: FC<IProps> = ({ comments, slug }) => {
           </Button>
         </Box>
       )}
-      {commentsLoading ? (
-        <Heading textAlign="center">Loading comments...</Heading>
-      ) : (
-        comments?.comments.map(({ id, createdAt, body, author }) => {
-          return (
-            <Comment
-              key={Math.random()}
-              createdAt={createdAt}
-              body={body}
-              author={author}
-              id={id}
-              slug={slug}
-            />
-          );
-        })
-      )}
+      {commentsLoading ? <Heading textAlign="center">Loading comments...</Heading> : showComments}
     </Box>
   );
 };

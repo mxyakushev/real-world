@@ -1,14 +1,8 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { MdPersonAddAlt } from 'react-icons/md';
 import { Box, Button } from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector, useAuth } from 'hooks';
-import {
-  follow,
-  getProfile,
-  profileLoadingStateSelector,
-  profileStateSelector,
-  unfollow,
-} from 'app';
+import { follow, profileLoadingStateSelector, profileStateSelector, unfollow } from 'app';
 import { useNavigate } from 'react-router-dom';
 
 interface IProps {
@@ -22,26 +16,22 @@ export const FollowButton: FC<IProps> = ({ username }) => {
   const profile = useAppSelector(profileStateSelector);
   const profileLoading = useAppSelector(profileLoadingStateSelector);
 
-  useEffect(() => {
-    dispatch(getProfile(username));
-  }, [dispatch, username]);
-
   const handleLikeClick = () => {
     if (user && !profile?.profile.following) {
-      dispatch(follow(profile?.profile.username || ''));
+      dispatch(follow(username));
     } else if (user && profile?.profile.following) {
-      dispatch(unfollow(profile.profile.username));
+      dispatch(unfollow(username));
     } else {
       navigate('/login');
     }
   };
 
   if (profileLoading) {
-    return <h1>loading</h1>;
+    return <Button disabled>Loading</Button>;
   }
 
   return (
-    <Button ml={4} mr={2} onClick={handleLikeClick}>
+    <Button onClick={handleLikeClick} mb={2}>
       <MdPersonAddAlt size={22} />
       <Box ml={1}>{profile?.profile.following ? 'Followed' : 'Follow'}</Box>
     </Button>
