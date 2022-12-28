@@ -1,8 +1,8 @@
 import { Layout, ProtectedRoute } from 'components';
 import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
+import { GuardAuth } from 'components/pages';
 import { routes } from './routes';
-import { GuardAuth } from '../components/pages/guards/guard-auth';
 
 const Home = lazy(() => import('components/pages/home'));
 const NewArticle = lazy(() => import('components/organisms/new-article/new-article'));
