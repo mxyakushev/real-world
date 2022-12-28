@@ -67,13 +67,15 @@ const Settings = () => {
 
   return (
     <Box
-      w="400px"
+      maxWidth="400px"
+      w="100%"
       h="80%"
       display="flex"
       alignItems="center"
       justifyContent="center"
       mx="auto"
       textAlign="center"
+      px={4}
     >
       <form onSubmit={handleSubmit(submit)} style={{ width: '100%' }}>
         <Heading as="h2" size="2xl" mb={5}>

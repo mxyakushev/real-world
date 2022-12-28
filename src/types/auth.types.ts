@@ -13,8 +13,13 @@ export interface ToolkitState {
   isSuccess: boolean;
   isLoading: boolean;
   message: string;
+  errors?: BaseReqError | null;
 }
 
 export interface AuthState extends ToolkitState {
   user: IUser | null;
 }
+
+export type BaseReqError = {
+  [key: string]: string;
+};

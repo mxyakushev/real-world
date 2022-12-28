@@ -7,9 +7,10 @@ interface IProps {
   tagList: string[];
   large?: boolean;
   setTagsArticles: Dispatch<SetStateAction<string | null>>;
+  onClose: () => void;
 }
 
-export const TagList: FC<IProps> = ({ isLoaded, tagList, large, setTagsArticles }) => {
+export const TagList: FC<IProps> = ({ isLoaded, tagList, large, setTagsArticles, onClose }) => {
   const navigate = useNavigate();
   return (
     <Box display="flex" justifyContent="end">
@@ -18,6 +19,7 @@ export const TagList: FC<IProps> = ({ isLoaded, tagList, large, setTagsArticles 
           <Button
             key={Math.random()}
             onClick={async () => {
+              onClose();
               navigate('/articles/tag');
               setTagsArticles(tag);
             }}

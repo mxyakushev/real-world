@@ -68,21 +68,32 @@ export const HomeTemplate = () => {
               )}
             </Box>
             <Popover>
-              <PopoverTrigger>
-                <Button borderRadius={0} minWidth="120px">
-                  Popular tags
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent mr={6}>
-                <PopoverArrow />
-                <PopoverCloseButton size="lg" />
-                <PopoverHeader py={3} fontSize="20px">
-                  Tags
-                </PopoverHeader>
-                <PopoverBody>
-                  <TagList setTagsArticles={setTagsArticles} isLoaded tagList={tags || []} large />
-                </PopoverBody>
-              </PopoverContent>
+              {/* eslint-disable-next-line react/no-unused-prop-types */}
+              {({ onClose }: { onClose: () => void }) => (
+                <>
+                  <PopoverTrigger>
+                    <Button borderRadius={0} minWidth="120px">
+                      Popular tags
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent mr={6}>
+                    <PopoverArrow />
+                    <PopoverCloseButton size="lg" />
+                    <PopoverHeader py={3} fontSize="20px">
+                      Tags
+                    </PopoverHeader>
+                    <PopoverBody>
+                      <TagList
+                        setTagsArticles={setTagsArticles}
+                        isLoaded
+                        tagList={tags || []}
+                        large
+                        onClose={onClose}
+                      />
+                    </PopoverBody>
+                  </PopoverContent>
+                </>
+              )}
             </Popover>
           </Box>
           <Outlet context={tagsArticles} />

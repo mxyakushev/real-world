@@ -90,16 +90,26 @@ export const Header = () => {
       {isOpen ? (
         <Box pb={4} display={{ md: 'none' }}>
           <Stack as="nav" spacing={4}>
-            <NavLink to="/">Home</NavLink>
+            <NavLink to="/" onClick={onClose}>
+              Home
+            </NavLink>
             {user ? (
               <>
-                <NavLink to="/settings">Settings</NavLink>
-                <NavLink to="/new-article">New Article</NavLink>
+                <NavLink to="/settings" onClick={onClose}>
+                  Settings
+                </NavLink>
+                <NavLink to="/new-article" onClick={onClose}>
+                  New Article
+                </NavLink>
               </>
             ) : (
               <>
-                <NavLink to="/register">Register</NavLink>
-                <NavLink to="/login">Login</NavLink>
+                <NavLink to="/register" onClick={onClose}>
+                  Register
+                </NavLink>
+                <NavLink to="/login" onClick={onClose}>
+                  Login
+                </NavLink>
               </>
             )}
           </Stack>

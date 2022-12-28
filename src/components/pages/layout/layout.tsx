@@ -11,7 +11,7 @@ export const Layout = () => {
     dispatch(tagsThunk());
   });
   return (
-    <Box h="100%" w="100%">
+    <Box h="100vh" w="100%">
       <Header />
       <Outlet />
     </Box>

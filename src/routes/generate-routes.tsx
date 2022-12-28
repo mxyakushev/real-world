@@ -2,6 +2,7 @@ import { Layout, ProtectedRoute } from 'components';
 import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 import { routes } from './routes';
+import { GuardAuth } from '../components/pages/guards/guard-auth';
 
 const Home = lazy(() => import('components/pages/home'));
 const NewArticle = lazy(() => import('components/organisms/new-article/new-article'));
@@ -70,11 +71,19 @@ export const generateRoutes = [
       },
       {
         path: routes.REGISTER,
-        element: <Register />,
+        element: (
+          <GuardAuth>
+            <Register />
+          </GuardAuth>
+        ),
       },
       {
         path: routes.LOGIN,
-        element: <Login />,
+        element: (
+          <GuardAuth>
+            <Login />
+          </GuardAuth>
+        ),
       },
     ],
   },
