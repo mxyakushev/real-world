@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, useColorMode } from '@chakra-ui/react';
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
 
 interface IProps {
@@ -11,6 +11,7 @@ interface IProps {
 }
 export const Pagination: FC<IProps> = ({ setOffset, offset, setRange, range, maxRangeNumber }) => {
   const arr = Array.from({ length: maxRangeNumber }, (_, i) => i + 1);
+  const { colorMode } = useColorMode();
   const paginationNumbers = arr.length > 5 ? arr.slice(range - 5, range) : arr;
   return (
     <Box mb={6} px={4} display="flex" justifyContent="center">
@@ -36,7 +37,9 @@ export const Pagination: FC<IProps> = ({ setOffset, offset, setRange, range, max
         return (
           <Button
             key={number}
-            backgroundColor={offset === number - 1 ? '#d5d8df' : ''}
+            backgroundColor={
+              offset === number - 1 ? (colorMode === 'light' ? '#d5d8df' : '#171923') : ''
+            }
             maxWidth="50px"
             w="100%"
             px={0}

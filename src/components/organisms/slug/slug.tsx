@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Heading, Spinner, Button } from '@chakra-ui/react';
-import { ArticleLikeButton, User, CommentList, FollowButton, TagListArticle } from 'components';
+import { Box, Button, Heading, Spinner } from '@chakra-ui/react';
+import { ArticleLikeButton, CommentList, FollowButton, TagListArticle, User } from 'components';
 import { useAppDispatch, useAppSelector, useAuth } from 'hooks';
 import {
   articleCommentsStateSelector,
@@ -91,27 +91,23 @@ const Slug = () => {
                     <>
                       <Button
                         mr={3}
+                        borderRadius={0}
                         onClick={() =>
                           navigate(routes.NEW_ARTICLE, {
                             state: { article: data.article },
                           })
                         }
                       >
-                        <Box mr={2}>
-                          <BiEditAlt size={24} />
-                        </Box>
-                        Edit
+                        <BiEditAlt size={24} />
                       </Button>
                       <Button
+                        borderRadius={0}
                         onClick={async () => {
                           await dispatch(deleteArticle(slug as string));
                           navigate(routes.HOME);
                         }}
                       >
-                        <Box mr={2}>
-                          <RiDeleteBin2Line size={24} />
-                        </Box>
-                        Delete
+                        <RiDeleteBin2Line size={24} />
                       </Button>
                     </>
                   )}

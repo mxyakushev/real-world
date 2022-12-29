@@ -20,7 +20,6 @@ export const HomeTemplate = () => {
   const { tabName } = useParams();
   const dispatch = useAppDispatch();
   const tagsArticles = useAppSelector(tagSelectedStateSelector);
-  const activeTab = useParams();
 
   const handleTagSelect = () => {
     dispatch(setSelectedTag(''));
@@ -33,34 +32,20 @@ export const HomeTemplate = () => {
           <Box w="100vw" p={4} display="flex" justifyContent="space-between">
             <Box display="inline-block">
               <Link to="/articles/global" onClick={handleTagSelect}>
-                <Box
-                  p={2}
-                  display="inline-block"
-                  backgroundColor={activeTab.tabName === 'global' ? 'red.200' : 'white'}
-                >
+                <Button borderRadius={0} mr={2} mb={2}>
                   Global feed
-                </Box>
+                </Button>
               </Link>
               {user && (
                 <Link to="/articles/feed" onClick={handleTagSelect}>
-                  <Box
-                    p={2}
-                    display="inline-block"
-                    backgroundColor={activeTab.tabName === 'feed' ? 'red.200' : 'white'}
-                  >
+                  <Button borderRadius={0} mr={2} mb={2}>
                     Your feed
-                  </Box>
+                  </Button>
                 </Link>
               )}
               {tagsArticles.length > 0 && tabName === 'tag' && (
                 <Link to="/articles/tag">
-                  <Box
-                    p={2}
-                    display="inline-block"
-                    backgroundColor={activeTab.tabName === 'tag' ? 'red.200' : 'white'}
-                  >
-                    #{tagsArticles}
-                  </Box>
+                  <Button borderRadius={0}>#{tagsArticles}</Button>
                 </Link>
               )}
             </Box>

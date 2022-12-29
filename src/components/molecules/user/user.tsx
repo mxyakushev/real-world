@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Box, Skeleton, SkeletonCircle, Stack, Button, Avatar } from '@chakra-ui/react';
+import { Avatar, Box, Button, Skeleton, SkeletonCircle, Stack } from '@chakra-ui/react';
 import { IAuthor } from 'types';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'hooks';
@@ -27,7 +27,7 @@ export const User: FC<IProps> = ({ isLoaded, author, createdAt, size }) => {
       </SkeletonCircle>
       <Stack spacing={size === 'sm' ? 0.5 : 1} ml={2} fontSize={size === 'sm' ? '14px' : '18px'}>
         <Skeleton isLoaded={isLoaded}>
-          <Button onClick={handleUserClick} variant="link" color="black">
+          <Button onClick={handleUserClick} variant="link">
             {author.username}
           </Button>
         </Skeleton>

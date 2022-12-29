@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, useColorMode } from '@chakra-ui/react';
 import { IAuthor } from 'types';
 import { RiDeleteBin2Line } from 'react-icons/ri';
 import { useAppDispatch, useAuth } from 'hooks';
@@ -15,6 +15,7 @@ interface IProps {
 }
 export const Comment: FC<IProps> = ({ slug, id, body, author, createdAt }) => {
   const dispatch = useAppDispatch();
+  const { colorMode } = useColorMode();
   const user = useAuth();
   return (
     <Box mb={5} maxWidth="800px" mx="auto" borderWidth={2} borderRadius={0} overflow="hidden">
@@ -22,14 +23,12 @@ export const Comment: FC<IProps> = ({ slug, id, body, author, createdAt }) => {
         {user?.user.username === author.username && (
           <Button
             mb={2}
+            borderRadius={0}
             onClick={() => {
               dispatch(deleteOneComment({ id, slug }));
             }}
           >
-            <Box mr={2}>
-              <RiDeleteBin2Line size={24} />
-            </Box>
-            Delete
+            <RiDeleteBin2Line size={24} />
           </Button>
         )}
       </Box>
@@ -43,7 +42,7 @@ export const Comment: FC<IProps> = ({ slug, id, body, author, createdAt }) => {
       >
         {body}
       </Box>
-      <Box px={5} py={2} backgroundColor="#e5e5e5">
+      <Box px={5} py={2} backgroundColor={colorMode === 'light' ? '#e5e5e5' : '#171923'}>
         <Box>
           <User author={author} createdAt={createdAt} isLoaded />
         </Box>

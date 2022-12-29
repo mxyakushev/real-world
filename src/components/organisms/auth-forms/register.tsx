@@ -27,6 +27,7 @@ const schema = yup.object().shape({
     .string()
     .required('required field')
     .min(5, 'minimum 5 characters')
+    .email('invalid email')
     .max(30, 'maximum 30 characters'),
   password: yup
     .string()

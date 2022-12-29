@@ -1,29 +1,32 @@
 import {
-  Box,
-  Flex,
   Avatar,
+  Box,
+  Button,
+  Flex,
   HStack,
   IconButton,
-  Button,
   Menu,
   MenuButton,
-  MenuList,
-  MenuItem,
   MenuDivider,
-  useDisclosure,
-  useColorModeValue,
+  MenuItem,
+  MenuList,
   Stack,
+  useColorMode,
+  useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAuth } from 'hooks';
 import { authService } from 'services';
 import { getAllArticles, removeUser, resetProfile } from 'app';
+import { HiOutlineMoon, HiOutlineSun } from 'react-icons/hi';
 
 export const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { colorMode, toggleColorMode } = useColorMode();
   const user = useAuth();
   const logout = () => {
     navigate('/');
@@ -34,7 +37,7 @@ export const Header = () => {
 
   return (
     <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
-      <Flex h={16} alignItems="center" justifyContent="space-between">
+      <Flex h={16} alignItems="center">
         <IconButton
           size="md"
           icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
@@ -56,8 +59,29 @@ export const Header = () => {
             </>
           )}
         </HStack>
+        <Button
+          onClick={() => toggleColorMode()}
+          ml={2}
+          backgroundColor={colorMode === 'light' ? 'gray.200' : ''}
+        >
+          {colorMode === 'dark' ? (
+            <Box display="flex" alignItems="center">
+              <Box mr={2}>
+                <HiOutlineSun size={22} />
+              </Box>
+              light
+            </Box>
+          ) : (
+            <Box display="flex" alignItems="center">
+              <Box mr={2}>
+                <HiOutlineMoon size={22} />
+              </Box>
+              dark
+            </Box>
+          )}
+        </Button>
         {user && (
-          <Flex alignItems="center">
+          <Flex alignItems="center" ml="auto">
             <Menu>
               <MenuButton as={Button} rounded="full" variant="link" cursor="pointer" minW={0}>
                 <Avatar boxSize="40px" src={user.user.image} />

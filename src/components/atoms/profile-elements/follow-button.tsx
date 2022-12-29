@@ -37,7 +37,7 @@ export const FollowButton: FC<IProps> = ({ username }) => {
   }
 
   return (
-    <Button onClick={handleLikeClick} mb={2} disabled={disabledBtn}>
+    <Button onClick={handleLikeClick} mb={2} disabled={disabledBtn} borderRadius={0}>
       <MdPersonAddAlt size={22} />
       <Box ml={1}>{profile?.profile.following ? 'Followed' : 'Follow'}</Box>
     </Button>
