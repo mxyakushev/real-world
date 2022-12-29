@@ -45,7 +45,9 @@ export const HomeTemplate = () => {
               )}
               {tagsArticles.length > 0 && tabName === 'tag' && (
                 <Link to="/articles/tag">
-                  <Button borderRadius={0}>#{tagsArticles}</Button>
+                  <Button borderRadius={0} mb={2}>
+                    #{tagsArticles}
+                  </Button>
                 </Link>
               )}
             </Box>
