@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Box, Button, Skeleton } from '@chakra-ui/react';
 import { AiOutlineLike } from 'react-icons/ai';
 import { useAppDispatch, useAuth } from 'hooks';
 import { useNavigate } from 'react-router-dom';
-import { likeArticle, dislikeArticle } from 'app';
+import { dislikeArticle, likeArticle } from 'app';
 
 interface IProps {
   isLoaded: boolean;
@@ -16,14 +16,20 @@ export const ArticleLikeButton: FC<IProps> = ({ isLoaded, favorited, favoritesCo
   const user = useAuth();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const handleLikeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    if (user && !favorited) {
-      dispatch(likeArticle(slug));
-    } else if (user && favorited) {
-      dispatch(dislikeArticle(slug));
-    } else {
-      navigate('/login');
+  const [disabledBtn, setDisabledBtn] = useState(false);
+  const handleLikeClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    try {
+      e.stopPropagation();
+      setDisabledBtn(true);
+      if (user && !favorited) {
+        await dispatch(likeArticle(slug));
+      } else if (user && favorited) {
+        await dispatch(dislikeArticle(slug));
+      } else {
+        navigate('/login');
+      }
+    } finally {
+      setDisabledBtn(false);
     }
   };
 
@@ -35,6 +41,7 @@ export const ArticleLikeButton: FC<IProps> = ({ isLoaded, favorited, favoritesCo
         backgroundColor={favorited ? 'red.200' : ''}
         onClick={handleLikeClick}
         _hover={{ backgroundColor: 'none' }}
+        disabled={disabledBtn}
       >
         <AiOutlineLike size={22} />
         <Box ml={1} fontSize="20px">

@@ -17,6 +17,7 @@ import { Link, Outlet, useParams } from 'react-router-dom';
 
 export const HomeTemplate = () => {
   const user = useAuth();
+  const { tabName } = useParams();
   const dispatch = useAppDispatch();
   const tagsArticles = useAppSelector(tagSelectedStateSelector);
   const activeTab = useParams();
@@ -51,7 +52,7 @@ export const HomeTemplate = () => {
                   </Box>
                 </Link>
               )}
-              {tagsArticles.length > 0 && (
+              {tagsArticles.length > 0 && tabName === 'tag' && (
                 <Link to="/articles/tag">
                   <Box
                     p={2}

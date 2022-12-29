@@ -177,6 +177,23 @@ export const articlesSlice = createSlice({
           }
           return article;
         });
+        state.articlesTag.articles = state.articlesTag?.articles?.map((article) => {
+          if (article.slug === action.payload.article.slug) {
+            state.singleArticle = {
+              article: {
+                ...article,
+                favorited: true,
+                favoritesCount: action.payload.article.favoritesCount,
+              },
+            };
+            return {
+              ...article,
+              favorited: true,
+              favoritesCount: action.payload.article.favoritesCount,
+            };
+          }
+          return article;
+        });
       })
       .addCase(dislikeArticle.fulfilled, (state: ArticlesState, action: AnyAction) => {
         state.buttonLoading = false;
@@ -233,6 +250,23 @@ export const articlesSlice = createSlice({
           return article;
         });
         state.articlesFavorited.articles = state.articlesFavorited?.articles?.map((article) => {
+          if (article.slug === action.payload.article.slug) {
+            state.singleArticle = {
+              article: {
+                ...article,
+                favorited: false,
+                favoritesCount: action.payload.article.favoritesCount,
+              },
+            };
+            return {
+              ...article,
+              favorited: false,
+              favoritesCount: action.payload.article.favoritesCount,
+            };
+          }
+          return article;
+        });
+        state.articlesTag.articles = state.articlesTag?.articles?.map((article) => {
           if (article.slug === action.payload.article.slug) {
             state.singleArticle = {
               article: {
