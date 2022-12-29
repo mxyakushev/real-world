@@ -1,33 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Box,
+  Button,
   Popover,
+  PopoverArrow,
   PopoverBody,
-  PopoverTrigger,
+  PopoverCloseButton,
   PopoverContent,
   PopoverHeader,
-  PopoverArrow,
-  PopoverCloseButton,
-  Button,
+  PopoverTrigger,
 } from '@chakra-ui/react';
-import { useAppSelector, useAuth } from 'hooks';
-import { tagsStateSelector } from 'app';
+import { useAppDispatch, useAppSelector, useAuth } from 'hooks';
+import { setSelectedTag, tagSelectedStateSelector } from 'app';
 import { TagList } from 'components';
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Link, Outlet, useParams } from 'react-router-dom';
 
 export const HomeTemplate = () => {
   const user = useAuth();
-  const { tabName } = useParams();
-  const tags = useAppSelector(tagsStateSelector);
-  const navigate = useNavigate();
-  const [tagsArticles, setTagsArticles] = useState<null | string>(null);
+  const dispatch = useAppDispatch();
+  const tagsArticles = useAppSelector(tagSelectedStateSelector);
   const activeTab = useParams();
 
-  useEffect(() => {
-    if (tabName === 'tag' && !tagsArticles) {
-      navigate('/');
-    }
-  }, [navigate, tabName, tagsArticles]);
+  const handleTagSelect = () => {
+    dispatch(setSelectedTag(''));
+  };
 
   return (
     <Box>
@@ -35,7 +31,7 @@ export const HomeTemplate = () => {
         <Box>
           <Box w="100vw" p={4} display="flex" justifyContent="space-between">
             <Box display="inline-block">
-              <Link to="/articles/global" onClick={() => setTagsArticles(null)}>
+              <Link to="/articles/global" onClick={handleTagSelect}>
                 <Box
                   p={2}
                   display="inline-block"
@@ -45,7 +41,7 @@ export const HomeTemplate = () => {
                 </Box>
               </Link>
               {user && (
-                <Link to="/articles/feed" onClick={() => setTagsArticles(null)}>
+                <Link to="/articles/feed" onClick={handleTagSelect}>
                   <Box
                     p={2}
                     display="inline-block"
@@ -55,7 +51,7 @@ export const HomeTemplate = () => {
                   </Box>
                 </Link>
               )}
-              {tagsArticles && (
+              {tagsArticles.length > 0 && (
                 <Link to="/articles/tag">
                   <Box
                     p={2}
@@ -83,13 +79,7 @@ export const HomeTemplate = () => {
                       Tags
                     </PopoverHeader>
                     <PopoverBody>
-                      <TagList
-                        setTagsArticles={setTagsArticles}
-                        isLoaded
-                        tagList={tags || []}
-                        large
-                        onClose={onClose}
-                      />
+                      <TagList isLoaded large onClose={onClose} />
                     </PopoverBody>
                   </PopoverContent>
                 </>

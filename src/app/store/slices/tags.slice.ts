@@ -1,8 +1,9 @@
-import { AnyAction, createSlice } from '@reduxjs/toolkit';
+import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { tagsThunk } from 'app/store/thunks';
 
 interface IState {
   tags: string[] | null;
+  selectedTag: string;
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
@@ -15,12 +16,17 @@ const initialState: IState = {
   isSuccess: false,
   isLoading: false,
   message: '',
+  selectedTag: '',
 };
 
 export const tagsSlice = createSlice({
   name: 'tags',
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedTag(state: IState, action: PayloadAction<string>) {
+      state.selectedTag = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(tagsThunk.pending, (state: IState) => {
@@ -39,4 +45,6 @@ export const tagsSlice = createSlice({
       });
   },
 });
+
+export const { setSelectedTag } = tagsSlice.actions;
 export const TagsReducer = tagsSlice.reducer;

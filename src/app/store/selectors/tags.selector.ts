@@ -8,6 +8,11 @@ export const tagsStateSelector = createDraftSafeSelector(
   (state) => state.tags
 );
 
+export const tagSelectedStateSelector = createDraftSafeSelector(
+  tagsGeneralSelector,
+  (state) => state.selectedTag
+);
+
 export const errorTagsStateSelector = createDraftSafeSelector(
   tagsGeneralSelector,
   (state) => state.isError
