@@ -35,7 +35,7 @@ const NewArticle = () => {
     control,
     formState: { errors },
   } = useForm<IFormValues>({
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: yupResolver(schema),
     defaultValues: {
       title: dataToEdit.state ? dataToEdit.state.article.title : '',

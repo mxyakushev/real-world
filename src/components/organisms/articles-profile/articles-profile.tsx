@@ -35,13 +35,17 @@ const ArticlesProfile = () => {
     }
   }, [dispatch, favoritedOffset, profileOffset, tabName, username]);
 
+  if (isLoading) {
+    return <Heading textAlign="center">loading...</Heading>;
+  }
+
   if (tabName === 'articles') {
     return (
       <Box>
         {profileArticles?.articlesCount > 0 ? (
           <ArticleList articles={profileArticles?.articles} isLoaded={!isLoading} />
         ) : (
-          <Heading textAlign="center">no articles</Heading>
+          <Heading textAlign="center">no articles found.</Heading>
         )}
         {!isLoading &&
           profileArticles?.articlesCount > 10 &&
@@ -54,6 +58,7 @@ const ArticlesProfile = () => {
               maxRangeNumber={Math.ceil(profileArticles.articlesCount / 10)}
             />
           )}
+        <Box p={10} />
       </Box>
     );
   }
@@ -63,7 +68,7 @@ const ArticlesProfile = () => {
       {favoritedArticles?.articlesCount > 0 ? (
         <ArticleList articles={favoritedArticles?.articles} isLoaded={!isLoading} />
       ) : (
-        <Heading textAlign="center">no articles</Heading>
+        <Heading textAlign="center">no articles found.</Heading>
       )}
       {!isLoading &&
         favoritedArticles?.articlesCount > 10 &&
@@ -76,6 +81,7 @@ const ArticlesProfile = () => {
             maxRangeNumber={Math.ceil(favoritedArticles.articlesCount / 10)}
           />
         )}
+      <Box p={10} />
     </Box>
   );
 };

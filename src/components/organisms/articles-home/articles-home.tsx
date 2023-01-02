@@ -45,7 +45,7 @@ const ArticlesHome = () => {
 
   if (tabName === 'global') {
     return (
-      <Box>
+      <Box height="100%">
         <ArticleList articles={globalArticles?.articles} isLoaded={!isLoading} />
         {!isLoading &&
           globalArticles?.articlesCount > 10 &&
@@ -64,7 +64,7 @@ const ArticlesHome = () => {
 
   if (tabName === 'feed') {
     return (
-      <Box>
+      <Box height="100%">
         <ArticleList articles={feedArticles?.articles} isLoaded={!isLoading} />
         {!isLoading && feedArticles?.articlesCount > 10 && feedArticles?.articles.length !== 0 && (
           <Pagination
@@ -79,7 +79,7 @@ const ArticlesHome = () => {
     );
   }
   return (
-    <Box>
+    <Box height="100%">
       <ArticleList articles={tagArticles?.articles} isLoaded={!isLoading} />
       {!isLoading && tagArticles?.articlesCount > 10 && tagArticles?.articles.length !== 0 && (
         <Pagination

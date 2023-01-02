@@ -38,7 +38,7 @@ const Login = () => {
     formState: { errors },
     setError,
   } = useForm<IFormValues>({
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: yupResolver(schema),
     defaultValues: {
       email: '',

@@ -36,7 +36,7 @@ const Settings = () => {
     control,
     formState: { errors },
   } = useForm<IFormValues>({
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: yupResolver(schema),
     defaultValues: {
       email: user?.user.email,
