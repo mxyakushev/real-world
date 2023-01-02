@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { Link, useParams, Outlet } from 'react-router-dom';
+import { Link, Outlet, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector, useAuth } from 'hooks';
 import { getProfile, profileLoadingStateSelector, profileStateSelector } from 'app';
-import { Avatar, Box, Heading, Spinner, Button } from '@chakra-ui/react';
+import { Avatar, Box, Button, Heading, Spinner } from '@chakra-ui/react';
 import { FollowButton } from '../atoms';
 
 const Profile = () => {
@@ -29,12 +29,18 @@ const Profile = () => {
   return (
     <Box py={5}>
       <Box p={5} mx="auto" maxWidth="500px">
-        <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
-          <Avatar mr={2} boxSize={140} src={profile?.profile.image} />
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          mb={4}
+        >
+          <Avatar mr={2} mb={3} boxSize={300} src={profile?.profile.image} />
           <Box>
             <Heading mb={3}>{profile?.profile.username}</Heading>
             {profile?.profile && profile.profile.username !== user?.user.username && (
-              <FollowButton username={profile.profile.username} />
+              <FollowButton username={profile.profile.username} width />
             )}
             {profile?.profile.bio && <Box textAlign="center">{profile?.profile.bio}</Box>}
           </Box>

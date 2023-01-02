@@ -8,7 +8,7 @@ import {
   getArticlesProfile,
   loadingArticlesStateSelector,
 } from 'app';
-import { Box } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 import { ArticleList } from '../article-list';
 import { Pagination } from '../../molecules';
 
@@ -38,7 +38,11 @@ const ArticlesProfile = () => {
   if (tabName === 'articles') {
     return (
       <Box>
-        <ArticleList articles={profileArticles?.articles} isLoaded={!isLoading} />
+        {profileArticles?.articlesCount > 0 ? (
+          <ArticleList articles={profileArticles?.articles} isLoaded={!isLoading} />
+        ) : (
+          <Heading textAlign="center">no articles</Heading>
+        )}
         {!isLoading &&
           profileArticles?.articlesCount > 10 &&
           profileArticles?.articles.length !== 0 && (
@@ -56,7 +60,11 @@ const ArticlesProfile = () => {
 
   return (
     <Box>
-      <ArticleList articles={favoritedArticles?.articles} isLoaded={!isLoading} />
+      {favoritedArticles?.articlesCount > 0 ? (
+        <ArticleList articles={favoritedArticles?.articles} isLoaded={!isLoading} />
+      ) : (
+        <Heading textAlign="center">no articles</Heading>
+      )}
       {!isLoading &&
         favoritedArticles?.articlesCount > 10 &&
         favoritedArticles?.articles.length !== 0 && (

@@ -7,9 +7,10 @@ import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri';
 
 interface IProps {
   username: string;
+  width?: boolean;
 }
 
-export const FollowButton: FC<IProps> = ({ username }) => {
+export const FollowButton: FC<IProps> = ({ username, width }) => {
   const dispatch = useAppDispatch();
   const user = useAuth();
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export const FollowButton: FC<IProps> = ({ username }) => {
   }
 
   return (
-    <Button onClick={handleLikeClick} mb={2} disabled={disabledBtn}>
+    <Button onClick={handleLikeClick} mb={2} disabled={disabledBtn} width={width ? '100%' : ''}>
       {profile?.profile.following ? (
         <RiUserUnfollowLine size={22} />
       ) : (

@@ -47,6 +47,10 @@ export const generateRoutes = [
             path: routes.ARTICLES_PROFILE,
             element: <ArticlesProfile />,
           },
+          {
+            index: true,
+            element: <Navigate to="articles" replace />,
+          },
         ],
       },
       {
