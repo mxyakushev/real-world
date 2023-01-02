@@ -34,7 +34,6 @@ export const TagList: FC<IProps> = ({ isLoaded, large, onClose }) => {
             mb={large ? 3 : 2}
             fontSize={large ? '18px' : '14px'}
             cursor="pointer"
-            borderRadius={0}
           >
             {tag}
           </Button>

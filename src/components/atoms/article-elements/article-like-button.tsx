@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
-import { Box, Button, Skeleton, useColorMode } from '@chakra-ui/react';
-import { AiOutlineLike } from 'react-icons/ai';
+import { Box, Button, Skeleton } from '@chakra-ui/react';
 import { useAppDispatch, useAuth } from 'hooks';
 import { useNavigate } from 'react-router-dom';
 import { dislikeArticle, likeArticle } from 'app';
+import { BiDislike, BiLike } from 'react-icons/bi';
 
 interface IProps {
   isLoaded: boolean;
@@ -17,7 +17,6 @@ export const ArticleLikeButton: FC<IProps> = ({ isLoaded, favorited, favoritesCo
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [disabledBtn, setDisabledBtn] = useState(false);
-  const { colorMode } = useColorMode();
   const handleLikeClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.stopPropagation();
@@ -36,16 +35,8 @@ export const ArticleLikeButton: FC<IProps> = ({ isLoaded, favorited, favoritesCo
 
   return (
     <Skeleton isLoaded={isLoaded} height="40px">
-      <Button
-        display="flex"
-        alignItems="center"
-        backgroundColor={favorited ? (colorMode === 'light' ? 'red.200' : 'red.500') : ''}
-        borderRadius={0}
-        onClick={handleLikeClick}
-        _hover={{ backgroundColor: 'none' }}
-        disabled={disabledBtn}
-      >
-        <AiOutlineLike size={22} />
+      <Button display="flex" alignItems="center" onClick={handleLikeClick} disabled={disabledBtn}>
+        {favorited ? <BiDislike size={22} /> : <BiLike size={22} />}
         <Box ml={1} fontSize="20px">
           {favoritesCount}
         </Box>

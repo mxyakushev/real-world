@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Button, Heading, Spinner } from '@chakra-ui/react';
+import { Box, Button, Heading, Spinner, useColorMode } from '@chakra-ui/react';
 import { ArticleLikeButton, CommentList, FollowButton, TagListArticle, User } from 'components';
 import { useAppDispatch, useAppSelector, useAuth } from 'hooks';
 import {
@@ -28,6 +28,7 @@ const Slug = () => {
   const dispatch = useAppDispatch();
   const user = useAuth();
   const navigate = useNavigate();
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     if (slug != null) {
@@ -54,10 +55,17 @@ const Slug = () => {
   }
 
   return (
-    <Box p={5}>
+    <Box p={3}>
       {data && comments && (
         <>
-          <Box borderWidth={2} borderRadius={0} mb={5}>
+          <Box
+            mb={5}
+            borderWidth={1}
+            borderColor={colorMode === 'dark' ? '#232b3b' : '#ebebeb'}
+            backgroundColor={colorMode === 'dark' ? '#232b3b' : '#fff'}
+            borderRadius={10}
+            p={0}
+          >
             <Box fontSize="20px" fontWeight="700" mb={5} px={5} pt={5}>
               {data.article.title}
             </Box>
@@ -90,8 +98,7 @@ const Slug = () => {
                   {user?.user.username === data.article.author.username && (
                     <>
                       <Button
-                        mr={3}
-                        borderRadius={0}
+                        mr={4}
                         onClick={() =>
                           navigate(routes.NEW_ARTICLE, {
                             state: { article: data.article },
@@ -101,7 +108,6 @@ const Slug = () => {
                         <BiEditAlt size={24} />
                       </Button>
                       <Button
-                        borderRadius={0}
                         onClick={async () => {
                           await dispatch(deleteArticle(slug as string));
                           navigate(routes.HOME);

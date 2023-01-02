@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { IArticle } from 'types';
 import { useNavigate } from 'react-router-dom';
-import { Box, Skeleton } from '@chakra-ui/react';
-import { User, ArticleLikeButton, TagListArticle } from 'components';
+import { Box, Skeleton, useColorMode } from '@chakra-ui/react';
+import { ArticleLikeButton, TagListArticle, User } from 'components';
 import { useAppDispatch } from 'hooks';
 import { resetSingleArticle } from 'app';
 
@@ -16,14 +16,16 @@ export const Article: FC<IProps> = ({ article, isLoaded }) => {
     article;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { colorMode } = useColorMode();
 
   return (
     <Box
       mb={5}
-      borderWidth={2}
-      borderColor="#ebebeb"
+      borderColor={colorMode === 'dark' ? '#232b3b' : '#ebebeb'}
       padding={5}
-      borderRadius={0}
+      borderWidth={1}
+      backgroundColor={colorMode === 'dark' ? '#232b3b' : '#fff'}
+      borderRadius={10}
       onClick={() => {
         dispatch(resetSingleArticle());
         navigate(`/singleArticle/${slug}`);

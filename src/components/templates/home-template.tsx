@@ -32,22 +32,20 @@ export const HomeTemplate = () => {
           <Box w="100vw" p={4} display="flex" justifyContent="space-between">
             <Box display="inline-block">
               <Link to="/articles/global" onClick={handleTagSelect}>
-                <Button borderRadius={0} mr={2} mb={2}>
+                <Button mr={2} mb={2}>
                   Global feed
                 </Button>
               </Link>
               {user && (
                 <Link to="/articles/feed" onClick={handleTagSelect}>
-                  <Button borderRadius={0} mr={2} mb={2}>
+                  <Button mr={2} mb={2}>
                     Your feed
                   </Button>
                 </Link>
               )}
               {tagsArticles.length > 0 && tabName === 'tag' && (
                 <Link to="/articles/tag">
-                  <Button borderRadius={0} mb={2}>
-                    #{tagsArticles}
-                  </Button>
+                  <Button mb={2}>#{tagsArticles}</Button>
                 </Link>
               )}
             </Box>
@@ -56,9 +54,7 @@ export const HomeTemplate = () => {
               {({ onClose }: { onClose: () => void }) => (
                 <>
                   <PopoverTrigger>
-                    <Button borderRadius={0} minWidth="120px">
-                      Popular tags
-                    </Button>
+                    <Button minWidth="120px">Popular tags</Button>
                   </PopoverTrigger>
                   <PopoverContent mr={6}>
                     <PopoverArrow />

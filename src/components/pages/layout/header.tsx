@@ -61,24 +61,14 @@ export const Header = () => {
         </HStack>
         <Button
           onClick={() => toggleColorMode()}
-          ml={2}
+          ml={4}
           backgroundColor={colorMode === 'light' ? 'gray.200' : ''}
+          borderRadius={200}
+          height="40px"
+          width="40px"
+          p={0}
         >
-          {colorMode === 'dark' ? (
-            <Box display="flex" alignItems="center">
-              <Box mr={2}>
-                <HiOutlineSun size={22} />
-              </Box>
-              light
-            </Box>
-          ) : (
-            <Box display="flex" alignItems="center">
-              <Box mr={2}>
-                <HiOutlineMoon size={22} />
-              </Box>
-              dark
-            </Box>
-          )}
+          {colorMode === 'dark' ? <HiOutlineSun size={22} /> : <HiOutlineMoon size={22} />}
         </Button>
         {user && (
           <Flex alignItems="center" ml="auto">

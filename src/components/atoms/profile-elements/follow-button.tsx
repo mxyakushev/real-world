@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
-import { MdPersonAddAlt } from 'react-icons/md';
 import { Box, Button } from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector, useAuth } from 'hooks';
 import { follow, profileLoadingStateSelector, profileStateSelector, unfollow } from 'app';
 import { useNavigate } from 'react-router-dom';
+import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri';
 
 interface IProps {
   username: string;
@@ -37,8 +37,12 @@ export const FollowButton: FC<IProps> = ({ username }) => {
   }
 
   return (
-    <Button onClick={handleLikeClick} mb={2} disabled={disabledBtn} borderRadius={0}>
-      <MdPersonAddAlt size={22} />
+    <Button onClick={handleLikeClick} mb={2} disabled={disabledBtn}>
+      {profile?.profile.following ? (
+        <RiUserUnfollowLine size={22} />
+      ) : (
+        <RiUserFollowLine size={22} />
+      )}
       <Box ml={1}>{profile?.profile.following ? 'Followed' : 'Follow'}</Box>
     </Button>
   );

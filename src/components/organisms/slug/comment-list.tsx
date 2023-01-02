@@ -1,5 +1,5 @@
-import React, { ChangeEvent, FC, useState, useMemo } from 'react';
-import { Box, Textarea, Button, Heading } from '@chakra-ui/react';
+import React, { ChangeEvent, FC, useMemo, useState } from 'react';
+import { Box, Button, Heading, Textarea } from '@chakra-ui/react';
 import { IComments } from 'types';
 import { Comment } from 'components';
 import { Link } from 'react-router-dom';
@@ -26,17 +26,8 @@ export const CommentList: FC<IProps> = ({ comments, slug }) => {
   };
 
   const showComments = useMemo(() => {
-    return comments?.comments.map(({ id, createdAt, body, author }) => {
-      return (
-        <Comment
-          key={Math.random()}
-          createdAt={createdAt}
-          body={body}
-          author={author}
-          id={id}
-          slug={slug}
-        />
-      );
+    return comments?.comments.map(({ id, body, author }) => {
+      return <Comment key={Math.random()} body={body} author={author} id={id} slug={slug} />;
     });
   }, [comments?.comments, slug]);
 

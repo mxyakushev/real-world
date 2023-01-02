@@ -9,7 +9,7 @@ type Size = 'sm';
 interface IProps {
   isLoaded: boolean;
   author: IAuthor;
-  createdAt: Date;
+  createdAt?: Date;
   size?: Size;
 }
 export const User: FC<IProps> = ({ isLoaded, author, createdAt, size }) => {
@@ -32,7 +32,11 @@ export const User: FC<IProps> = ({ isLoaded, author, createdAt, size }) => {
           </Button>
         </Skeleton>
         <Skeleton isLoaded={isLoaded}>
-          <Box fontSize={size === 'sm' ? '11px' : '14px'}>{createdAt.toString().slice(0, 10)}</Box>
+          {createdAt && (
+            <Box fontSize={size === 'sm' ? '11px' : '14px'}>
+              {createdAt.toString().slice(0, 10)}
+            </Box>
+          )}
         </Skeleton>
       </Stack>
     </Box>
