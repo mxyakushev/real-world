@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'app';
 import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react';
-import '@fontsource/montserrat';
+import '@fontsource/outfit';
 import { ErrorBoundary } from '../../components/organisms/error-boundary';
 import { ErrorBoundaryFallback } from '../../components/molecules/error-boundary-fallback';
 
@@ -13,8 +13,8 @@ const theme = extendTheme({
     useSystemColorMode: true,
   },
   fonts: {
-    heading: 'Montserrat',
-    body: 'Montserrat',
+    heading: 'Outfit',
+    body: 'Outfit',
   },
 });
 
