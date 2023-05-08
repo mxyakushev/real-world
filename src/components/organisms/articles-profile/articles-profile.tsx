@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from 'hooks';
+import { useAppSelector, useProfileTabData } from 'hooks';
 import {
-  articlesFavoritedStateSelector,
+  articlesLikedStateSelector,
   articlesProfileStateSelector,
-  getArticlesFavorited,
-  getArticlesProfile,
   loadingArticlesStateSelector,
 } from 'app';
 import { Box, Heading } from '@chakra-ui/react';
@@ -13,72 +10,31 @@ import { ArticleList } from '../article-list';
 import { Pagination } from '../../molecules';
 
 const ArticlesProfile = () => {
-  const { tabName } = useParams();
-  const { username } = useParams();
-  const dispatch = useAppDispatch();
+  const { tabName, username } = useParams();
+  const { offset, setOffset, range, setRange } = useProfileTabData(tabName, username);
+
   const profileArticles = useAppSelector(articlesProfileStateSelector);
-  const favoritedArticles = useAppSelector(articlesFavoritedStateSelector);
+  const likedArticles = useAppSelector(articlesLikedStateSelector);
   const isLoading = useAppSelector(loadingArticlesStateSelector);
 
-  const [profileOffset, setProfileOffset] = useState(0);
-  const [profileRange, setProfileRange] = useState(5);
-
-  const [favoritedOffset, setFavoritedOffset] = useState(0);
-  const [favoritedRange, setFavoritedRange] = useState(5);
-
-  useEffect(() => {
-    if (tabName === 'articles' && username) {
-      dispatch(getArticlesProfile({ limit: 10, offset: profileOffset * 10, username }));
-    }
-    if (tabName === 'favorited' && username) {
-      dispatch(getArticlesFavorited({ limit: 10, offset: favoritedOffset * 10, username }));
-    }
-  }, [dispatch, favoritedOffset, profileOffset, tabName, username]);
-
-  if (isLoading) {
-    return <Heading textAlign="center">loading...</Heading>;
-  }
-
-  if (tabName === 'articles') {
-    return (
-      <Box>
-        {profileArticles?.articlesCount > 0 ? (
-          <ArticleList articles={profileArticles?.articles} isLoaded={!isLoading} />
-        ) : (
-          <Heading textAlign="center">no articles found.</Heading>
-        )}
-        {!isLoading &&
-          profileArticles?.articlesCount > 10 &&
-          profileArticles?.articles.length !== 0 && (
-            <Pagination
-              setOffset={setProfileOffset}
-              offset={profileOffset}
-              setRange={setProfileRange}
-              range={profileRange}
-              maxRangeNumber={Math.ceil(profileArticles.articlesCount / 10)}
-            />
-          )}
-        <Box p={10} />
-      </Box>
-    );
-  }
+  const currentArticles = tabName === 'articles' ? profileArticles : likedArticles;
 
   return (
     <Box>
-      {favoritedArticles?.articlesCount > 0 ? (
-        <ArticleList articles={favoritedArticles?.articles} isLoaded={!isLoading} />
+      {currentArticles?.articlesCount > 0 ? (
+        <ArticleList articles={currentArticles?.articles} isLoaded={!isLoading} />
       ) : (
         <Heading textAlign="center">no articles found.</Heading>
       )}
       {!isLoading &&
-        favoritedArticles?.articlesCount > 10 &&
-        favoritedArticles?.articles.length !== 0 && (
+        currentArticles?.articlesCount > 10 &&
+        currentArticles?.articles.length !== 0 && (
           <Pagination
-            setOffset={setFavoritedOffset}
-            offset={favoritedOffset}
-            setRange={setFavoritedRange}
-            range={favoritedRange}
-            maxRangeNumber={Math.ceil(favoritedArticles.articlesCount / 10)}
+            setOffset={setOffset}
+            offset={offset}
+            setRange={setRange}
+            range={range}
+            maxRangeNumber={Math.ceil(currentArticles.articlesCount / 10)}
           />
         )}
       <Box p={10} />

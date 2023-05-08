@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { articleService } from 'services';
-import { IPublishArticle } from '../../../types';
+import { IPublishArticle } from 'types';
 
 export const getAllArticles = createAsyncThunk(
   'articles/getArticles',
@@ -41,14 +41,14 @@ export const getArticlesProfile = createAsyncThunk(
   }
 );
 
-export const getArticlesFavorited = createAsyncThunk(
-  'articles/getArticlesFavorited',
+export const getArticlesLiked = createAsyncThunk(
+  'articles/getArticlesLiked',
   async (
     { limit, offset, username }: { limit: number; offset: number; username: string },
     thunkAPI
   ) => {
     try {
-      return await articleService.getArticlesFavorited({ limit, offset, username });
+      return await articleService.getArticlesLiked({ limit, offset, username });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Error. Something went wrong';
       return thunkAPI.rejectWithValue(message);

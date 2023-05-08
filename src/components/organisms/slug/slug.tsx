@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Heading, Spinner, useColorMode } from '@chakra-ui/react';
 import { ArticleLikeButton, CommentList, FollowButton, TagListArticle, User } from 'components';

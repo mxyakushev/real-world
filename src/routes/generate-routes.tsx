@@ -1,4 +1,4 @@
-import { Layout, ProtectedRoute } from 'components';
+import { Layout, NotFound, ProtectedRoute } from 'components';
 import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 import { GuardAuth } from 'components/pages';
@@ -88,6 +88,10 @@ export const generateRoutes = [
             <Login />
           </GuardAuth>
         ),
+      },
+      {
+        path: '*',
+        element: <NotFound />,
       },
     ],
   },

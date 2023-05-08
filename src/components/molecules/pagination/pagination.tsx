@@ -1,6 +1,7 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { Box, Button, useColorMode } from '@chakra-ui/react';
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
+import { usePagination } from 'hooks';
 
 interface IProps {
   setOffset: Dispatch<SetStateAction<number>>;
@@ -9,24 +10,25 @@ interface IProps {
   range: number;
   maxRangeNumber: number;
 }
+
 export const Pagination: FC<IProps> = ({ setOffset, offset, setRange, range, maxRangeNumber }) => {
+  const { handlePrevious, handlePageClick, handleNext } = usePagination(
+    setOffset,
+    offset,
+    setRange,
+    range,
+    maxRangeNumber
+  );
   const arr = Array.from({ length: maxRangeNumber }, (_, i) => i + 1);
   const { colorMode } = useColorMode();
   const paginationNumbers = arr.length > 5 ? arr.slice(range - 5, range) : arr;
+
   return (
     <Box mb={6} px={4} display="flex" justifyContent="center">
       <Button
         maxWidth="100px"
         w="100%"
-        onClick={() => {
-          setOffset((prevState) => (prevState === 0 ? prevState : prevState - 1));
-          if (range - 4 === offset && offset > 2) {
-            setRange(offset + 2);
-          }
-          if (offset !== 0) {
-            window.scrollTo({ top: 0 });
-          }
-        }}
+        onClick={handlePrevious}
         disabled={offset === 0 || maxRangeNumber <= 5}
         mr={1}
         px={0}
@@ -43,18 +45,7 @@ export const Pagination: FC<IProps> = ({ setOffset, offset, setRange, range, max
             maxWidth="50px"
             w="100%"
             px={0}
-            onClick={() => {
-              setOffset(number - 1);
-              if (range === number && number + 2 <= maxRangeNumber) {
-                setRange(number + 2);
-              } else if (range === number && number !== maxRangeNumber) {
-                setRange(number + 1);
-              }
-              if (range - 4 === number && number > 2) {
-                setRange(number + 2);
-              }
-              window.scrollTo({ top: 0 });
-            }}
+            onClick={() => handlePageClick(number)}
             mx={1}
           >
             {number}
@@ -65,15 +56,9 @@ export const Pagination: FC<IProps> = ({ setOffset, offset, setRange, range, max
         maxWidth="100px"
         w="100%"
         minWidth="40px"
-        onClick={() => {
-          setOffset((prevState) => prevState + 1);
-          if (range === offset + 2) {
-            setRange(offset + 4);
-          }
-          window.scrollTo({ top: 0 });
-        }}
-        ml={1}
+        onClick={handleNext}
         disabled={offset + 1 >= maxRangeNumber || maxRangeNumber <= 5}
+        ml={1}
         px={0}
       >
         <MdArrowForwardIos size={18} />

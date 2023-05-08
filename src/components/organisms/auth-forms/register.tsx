@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Button, Heading } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { IUserRegister } from 'types';

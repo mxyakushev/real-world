@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { IArticle } from 'types';
 import { Article } from 'components';
 import { Box, Spinner } from '@chakra-ui/react';

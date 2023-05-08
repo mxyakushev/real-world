@@ -21,12 +21,6 @@ export const authSlice = createSlice({
     removeUser: (state: AuthState) => {
       state.user = null;
     },
-    reset: (state: AuthState) => {
-      state.isLoading = false;
-      state.isSuccess = false;
-      state.isError = false;
-      state.message = '';
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -73,5 +67,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const { reset, removeUser } = authSlice.actions;
+export const { removeUser } = authSlice.actions;
 export const AuthReducer = authSlice.reducer;

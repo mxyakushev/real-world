@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { Box, Tag, Skeleton } from '@chakra-ui/react';
+import { FC } from 'react';
+import { Box, Skeleton, Tag } from '@chakra-ui/react';
 
 interface IProps {
   isLoaded: boolean;

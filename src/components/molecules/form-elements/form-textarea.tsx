@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { CustomError, CustomTextarea } from 'components/atoms';
 

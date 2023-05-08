@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { ControllerRenderProps, FieldErrors, FieldValues } from 'react-hook-form';
 import { Input } from '@chakra-ui/react';
 
@@ -6,7 +6,7 @@ type InputType = 'email' | 'text' | 'password';
 
 interface IProps {
   field: ControllerRenderProps<FieldValues, string>;
-  errors: FieldErrors<FieldValues>;
+  errors: FieldErrors;
   name: string;
   placeholder: string;
   type: InputType;

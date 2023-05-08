@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { ControllerRenderProps, FieldErrors, FieldValues } from 'react-hook-form';
 import { Textarea } from '@chakra-ui/react';
 
 interface IProps {
   field: ControllerRenderProps<FieldValues, string>;
-  errors: FieldErrors<FieldValues>;
+  errors: FieldErrors;
   name: string;
   placeholder: string;
 }

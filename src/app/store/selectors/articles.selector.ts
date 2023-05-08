@@ -18,9 +18,9 @@ export const articlesTagStateSelector = createDraftSafeSelector(
   (state) => state.articlesTag
 );
 
-export const articlesFavoritedStateSelector = createDraftSafeSelector(
+export const articlesLikedStateSelector = createDraftSafeSelector(
   articlesGeneralSelector,
-  (state) => state.articlesFavorited
+  (state) => state.articlesLiked
 );
 
 export const articlesProfileStateSelector = createDraftSafeSelector(
@@ -47,12 +47,6 @@ export const loadingArticlesStateSelector = createDraftSafeSelector(
   articlesGeneralSelector,
   (state) => state.isLoading
 );
-
-export const loadingBtnArticlesStateSelector = createDraftSafeSelector(
-  articlesGeneralSelector,
-  (state) => state.buttonLoading
-);
-
 export const loadingCommentsArticlesStateSelector = createDraftSafeSelector(
   articlesGeneralSelector,
   (state) => state.commentLoading

@@ -1,6 +1,6 @@
 import { useRoutes } from 'react-router-dom';
 import { generateRoutes } from 'routes';
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { Box, Spinner } from '@chakra-ui/react';
 
 export const App = () => {

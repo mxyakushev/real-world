@@ -12,13 +12,3 @@ export const tagSelectedStateSelector = createDraftSafeSelector(
   tagsGeneralSelector,
   (state) => state.selectedTag
 );
-
-export const errorTagsStateSelector = createDraftSafeSelector(
-  tagsGeneralSelector,
-  (state) => state.isError
-);
-
-export const errorMessageTagsStateSelector = createDraftSafeSelector(
-  tagsGeneralSelector,
-  (state) => state.message
-);

@@ -8,17 +8,8 @@ export const profileStateSelector = createDraftSafeSelector(
   profilesGeneralSelector,
   (state) => state.profile
 );
-export const errorProfilesStateSelector = createDraftSafeSelector(
-  profilesGeneralSelector,
-  (state) => state.isError
-);
 
 export const profileLoadingStateSelector = createDraftSafeSelector(
   profilesGeneralSelector,
   (state) => state.isLoading
-);
-
-export const errorMessageProfilesStateSelector = createDraftSafeSelector(
-  profilesGeneralSelector,
-  (state) => state.message
 );

@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
-import { CustomInput, CustomError } from 'components/atoms';
+import { CustomError, CustomInput } from 'components/atoms';
 
 export type InputType = 'email' | 'text' | 'password';
 

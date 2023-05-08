@@ -9,22 +9,31 @@ import {
   editArticle,
   getAllArticles,
   getArticlesByTag,
-  getArticlesFavorited,
   getArticlesFeed,
+  getArticlesLiked,
   getArticlesProfile,
   getCommentsOnArticle,
   getSingleArticle,
   likeArticle,
 } from '../thunks';
 
-interface ArticlesState {
+interface ArticlesData {
   articles: IArticles;
-  articlesProfile: IArticles;
-  singleArticle: { article: IArticle } | null;
   articlesFeed: IArticles;
-  articlesFavorited: IArticles;
+  articlesProfile: IArticles;
+  articlesLiked: IArticles;
   articlesTag: IArticles;
+}
+
+interface SingleArticleData {
+  singleArticle: { article: IArticle } | null;
+}
+
+interface CommentsData {
   comments: IComments | null;
+}
+
+interface StatusData {
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
@@ -33,20 +42,38 @@ interface ArticlesState {
   message: string;
 }
 
-const initialState: ArticlesState = {
+type ArticlesState = ArticlesData & SingleArticleData & CommentsData & StatusData;
+
+const initialArticlesData: ArticlesData = {
   articles: { articles: [], articlesCount: 0 },
   articlesFeed: { articles: [], articlesCount: 0 },
   articlesProfile: { articles: [], articlesCount: 0 },
-  articlesFavorited: { articles: [], articlesCount: 0 },
+  articlesLiked: { articles: [], articlesCount: 0 },
   articlesTag: { articles: [], articlesCount: 0 },
+};
+
+const initialSingleArticleData: SingleArticleData = {
   singleArticle: null,
+};
+
+const initialCommentsData: CommentsData = {
   comments: { comments: [] },
+};
+
+const initialStatusData: StatusData = {
   isError: false,
   isSuccess: false,
   isLoading: false,
   buttonLoading: false,
   commentLoading: false,
   message: '',
+};
+
+const initialState: ArticlesState = {
+  ...initialArticlesData,
+  ...initialSingleArticleData,
+  ...initialCommentsData,
+  ...initialStatusData,
 };
 
 export const articlesSlice = createSlice({
@@ -83,7 +110,7 @@ export const articlesSlice = createSlice({
       .addCase(getArticlesFeed.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getArticlesFavorited.pending, (state) => {
+      .addCase(getArticlesLiked.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(commentArticle.pending, (state) => {
@@ -160,7 +187,7 @@ export const articlesSlice = createSlice({
           }
           return article;
         });
-        state.articlesFavorited.articles = state.articlesFavorited?.articles?.map((article) => {
+        state.articlesLiked.articles = state.articlesLiked?.articles?.map((article) => {
           if (article.slug === action.payload.article.slug) {
             state.singleArticle = {
               article: {
@@ -249,7 +276,7 @@ export const articlesSlice = createSlice({
           }
           return article;
         });
-        state.articlesFavorited.articles = state.articlesFavorited?.articles?.map((article) => {
+        state.articlesLiked.articles = state.articlesLiked?.articles?.map((article) => {
           if (article.slug === action.payload.article.slug) {
             state.singleArticle = {
               article: {
@@ -310,10 +337,10 @@ export const articlesSlice = createSlice({
         state.isSuccess = true;
         state.articlesTag = action.payload;
       })
-      .addCase(getArticlesFavorited.fulfilled, (state: ArticlesState, action: AnyAction) => {
+      .addCase(getArticlesLiked.fulfilled, (state: ArticlesState, action: AnyAction) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.articlesFavorited = action.payload;
+        state.articlesLiked = action.payload;
       })
       .addCase(getArticlesProfile.fulfilled, (state: ArticlesState, action: AnyAction) => {
         state.isLoading = false;
@@ -365,7 +392,7 @@ export const articlesSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(getArticlesFavorited.rejected, (state: ArticlesState, action: AnyAction) => {
+      .addCase(getArticlesLiked.rejected, (state: ArticlesState, action: AnyAction) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

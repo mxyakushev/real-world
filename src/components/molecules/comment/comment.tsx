@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Box, CloseButton, useColorMode } from '@chakra-ui/react';
 import { IAuthor } from 'types';
 import { useAppDispatch, useAuth } from 'hooks';

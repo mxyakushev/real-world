@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link, Outlet, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector, useAuth } from 'hooks';
 import { getProfile, profileLoadingStateSelector, profileStateSelector } from 'app';
@@ -49,8 +49,8 @@ const Profile = () => {
           <Link to={`/profile/${username}/articles`}>
             <Button mr={2}>Profile articles</Button>
           </Link>
-          <Link to={`/profile/${username}/favorited`}>
-            <Button ml={2}>Favorited articles</Button>
+          <Link to={`/profile/${username}/liked`}>
+            <Button ml={2}>Liked articles</Button>
           </Link>
         </Box>
       </Box>

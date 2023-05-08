@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { authService } from 'services';
 
-export const API_URL = 'https://api.realworld.io/api';
+export const API_URL = 'https://api.realworld.io/api'; // it is public api
 
 export const instance = axios.create({
   baseURL: API_URL,

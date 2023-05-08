@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Avatar, Box, Button, Skeleton, SkeletonCircle, Stack } from '@chakra-ui/react';
 import { IAuthor } from 'types';
 import { useNavigate } from 'react-router-dom';

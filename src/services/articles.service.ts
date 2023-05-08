@@ -53,7 +53,7 @@ const getArticlesProfile = async ({
   return response?.data;
 };
 
-const getArticlesFavorited = async ({
+const getArticlesLiked = async ({
   limit,
   offset,
   username,
@@ -63,7 +63,7 @@ const getArticlesFavorited = async ({
   username: string;
 }) => {
   const response = await instance
-    .get(`/articles?favorited=${username}&limit=${limit}&offset=${offset}`)
+    .get(`/articles?liked=${username}&limit=${limit}&offset=${offset}`)
     .catch((err) => console.log(err));
   return response?.data;
 };
@@ -127,7 +127,7 @@ export const articleService = {
   commentArticle,
   commentDelArticle,
   getArticlesProfile,
-  getArticlesFavorited,
+  getArticlesLiked,
   createArticle,
   deleteArticle,
   editArticle,

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { IArticle } from 'types';
 import { useNavigate } from 'react-router-dom';
 import { Box, Skeleton, useColorMode } from '@chakra-ui/react';
@@ -17,7 +17,6 @@ export const Article: FC<IProps> = ({ article, isLoaded }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { colorMode } = useColorMode();
-
   return (
     <Box
       mb={5}
